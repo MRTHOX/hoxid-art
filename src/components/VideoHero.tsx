@@ -1,62 +1,169 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { heroVideos } from '@/data/content';
 import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
 
+const DISPLAY_DURATION_MS = 3000;
+const OVERLAY_MIN_MS = 150;
+const OVERLAY_MAX_MS = 400;
+const LOAD_FAIL_TIMEOUT_MS = 2000;
+
 export default function VideoHero() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [nextIndex, setNextIndex] = useState(heroVideos.length > 1 ? 1 : 0);
+  const [activeSlot, setActiveSlot] = useState<0 | 1>(0);
+  const [overlayVisible, setOverlayVisible] = useState(heroVideos.length > 0);
+  const [bufferReady, setBufferReady] = useState(false);
+  const [waitingForBuffer, setWaitingForBuffer] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [sources, setSources] = useState<string[]>([
+    normalizeVideoUrl(heroVideos[0]?.videoUrl ?? ''),
+    normalizeVideoUrl(heroVideos[1]?.videoUrl ?? ''),
+  ]);
 
-  const currentVideo = heroVideos[currentIndex];
-  const videoUrl = normalizeVideoUrl(currentVideo?.videoUrl ?? '');
+  const primaryRef = useRef<HTMLVideoElement>(null);
+  const secondaryRef = useRef<HTMLVideoElement>(null);
+  const videoRefs = useMemo(() => [primaryRef, secondaryRef] as const, []);
+  const overlayStartRef = useRef<number | null>(null);
+  const loadFailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showOverlay = useCallback(() => {
+    if (overlayVisible) return;
+    overlayStartRef.current = Date.now();
+    setOverlayVisible(true);
+  }, [overlayVisible]);
+
+  const hideOverlay = useCallback(() => {
+    if (!overlayVisible) return;
+    const start = overlayStartRef.current;
+    const elapsed = start ? Date.now() - start : 0;
+    const delay = Math.min(
+      Math.max(OVERLAY_MIN_MS - elapsed, 0),
+      Math.max(OVERLAY_MAX_MS - elapsed, 0)
+    );
+
+    const timeout = setTimeout(() => {
+      setOverlayVisible(false);
+      overlayStartRef.current = null;
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [overlayVisible]);
+
+  const skipToFollowingVideo = useCallback(() => {
+    setBufferReady(false);
+    setWaitingForBuffer(false);
+    setNextIndex((prev) => (prev + 1) % heroVideos.length);
+  }, []);
+
+  const performSwap = useCallback(() => {
+    showOverlay();
+    const nextSlot: 0 | 1 = activeSlot === 0 ? 1 : 0;
+    setActiveSlot(nextSlot);
+    setCurrentIndex(nextIndex);
+    setNextIndex((prev) => (prev + 1) % heroVideos.length);
+  }, [activeSlot, nextIndex, showOverlay]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !videoUrl) return;
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleChange = () => setReduceMotion(mediaQuery.matches);
+    handleChange();
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (overlayVisible && overlayStartRef.current === null) {
+      overlayStartRef.current = Date.now();
+    }
+  }, [overlayVisible]);
+
+  useEffect(() => {
+    const activeVideo = videoRefs[activeSlot].current;
+    if (!activeVideo || !sources[activeSlot]) return;
 
     const playVideo = async () => {
       try {
-        await video.play();
-        setIsPlaying(true);
-        setHasError(false);
+        await activeVideo.play();
       } catch (error) {
         console.log('Autoplay blocked', error);
       }
     };
 
     playVideo();
-  }, [videoUrl]);
+  }, [activeSlot, sources, videoRefs]);
 
   useEffect(() => {
-    if (!isPlaying || heroVideos.length === 0) return;
+    if (heroVideos.length <= 1) return;
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % heroVideos.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [isPlaying]);
-
-  const handleClick = async () => {
-    const video = videoRef.current;
-    if (!isPlaying && video) {
-      try {
-        await video.play();
-        setIsPlaying(true);
-        setHasError(false);
-      } catch (error) {
-        console.error('Play failed', error);
+    const timer = setTimeout(() => {
+      if (bufferReady) {
+        performSwap();
+      } else {
+        setWaitingForBuffer(true);
+        showOverlay();
       }
+    }, DISPLAY_DURATION_MS);
+
+    return () => clearTimeout(timer);
+  }, [bufferReady, currentIndex, performSwap, showOverlay]);
+
+  useEffect(() => {
+    if (heroVideos.length <= 1) return;
+    const bufferSlot: 0 | 1 = activeSlot === 0 ? 1 : 0;
+    const bufferVideo = videoRefs[bufferSlot].current;
+    const nextVideo = heroVideos[nextIndex];
+
+    if (!nextVideo) return;
+
+    clearTimeout(loadFailTimerRef.current as ReturnType<typeof setTimeout>);
+
+    const frame = requestAnimationFrame(() => {
+      setBufferReady(false);
+      setSources((prev) => {
+        const updated = [...prev];
+        updated[bufferSlot] = normalizeVideoUrl(nextVideo.videoUrl);
+        return updated;
+      });
+
+      if (bufferVideo) {
+        bufferVideo.load();
+      }
+
+      loadFailTimerRef.current = setTimeout(() => {
+        skipToFollowingVideo();
+      }, LOAD_FAIL_TIMEOUT_MS);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+    };
+  }, [activeSlot, nextIndex, skipToFollowingVideo, videoRefs]);
+
+  const handleBufferReady = (slot: 0 | 1) => {
+    if (slot === activeSlot) return;
+    clearTimeout(loadFailTimerRef.current as ReturnType<typeof setTimeout>);
+    setBufferReady(true);
+    if (waitingForBuffer) {
+      setWaitingForBuffer(false);
+      performSwap();
     }
   };
 
-  const handleError = () => {
-    setHasError(true);
-    setIsPlaying(false);
-    setCurrentIndex((prev) => (prev + 1) % heroVideos.length);
+  const handleError = (slot: 0 | 1) => {
+    if (slot === activeSlot) {
+      setCurrentIndex((prev) => (prev + 1) % heroVideos.length);
+      setNextIndex((prev) => (prev + 1) % heroVideos.length);
+    } else {
+      skipToFollowingVideo();
+    }
+  };
+
+  const handlePlaying = (slot: 0 | 1) => {
+    if (slot === activeSlot) {
+      hideOverlay();
+    }
   };
 
   if (!heroVideos.length) {
@@ -65,33 +172,85 @@ export default function VideoHero() {
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden">
-      {!hasError && videoUrl ? (
+      {[0, 1].map((slot) => (
         <video
-          ref={videoRef}
-          key={currentVideo.id}
-          className="absolute inset-0 w-full h-full object-cover"
-          src={videoUrl}
-          onError={handleError}
+          key={`hero-video-${slot}`}
+          ref={videoRefs[slot]}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-0 ${
+            slot === activeSlot ? 'opacity-100' : 'opacity-0'
+          }`}
+          src={sources[slot]}
+          onCanPlay={() => handleBufferReady(slot as 0 | 1)}
+          onLoadedData={() => handleBufferReady(slot as 0 | 1)}
+          onError={() => handleError(slot as 0 | 1)}
+          onPlaying={() => handlePlaying(slot as 0 | 1)}
           {...safeVideoAttributes}
         />
-      ) : (
-        <div className="absolute inset-0 flex items-center justify-center text-white bg-black">
-          <span className="text-sm font-mono">Media unavailable</span>
+      ))}
+
+      {overlayVisible && (
+        <div className="absolute inset-0 bg-black text-white pointer-events-none">
+          <div className="absolute inset-0 opacity-70">
+            <div className={`absolute inset-0 ${reduceMotion ? '' : 'animate-glitch-lines'}`}></div>
+            <div className={`absolute inset-0 mix-blend-screen ${reduceMotion ? '' : 'animate-glitch-noise'}`}></div>
+          </div>
+          <div className="absolute top-4 left-4 flex flex-col items-start space-y-1 font-mono text-[10px] tracking-[0.18em] uppercase">
+            <span className="px-2 py-1 border border-white/40 bg-black/60">HOXID</span>
+            <span className="text-white/60">SYNC / BUFFER / FRAME</span>
+          </div>
         </div>
       )}
 
-      {!isPlaying && !hasError && (
-        <div
-          className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-80 cursor-pointer"
-          onClick={handleClick}
-        >
-          <button className="text-white text-sm tracking-wider border border-white px-8 py-3 hover:bg-white hover:text-black transition-colors duration-200">
-            TAP TO START
-          </button>
-        </div>
-      )}
+      <style jsx>{`
+        .animate-glitch-lines {
+          background: repeating-linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.05) 0px,
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 2px,
+            transparent 4px
+          );
+          animation: scan 1.4s linear infinite;
+        }
 
-      <div className="absolute bottom-8 left-8 text-white text-sm font-mono">hoxid.art</div>
+        .animate-glitch-noise {
+          background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 20%),
+            radial-gradient(circle at 80% 40%, rgba(255, 255, 255, 0.06), transparent 18%),
+            radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.04), transparent 22%);
+          animation: flicker 1.1s steps(2) infinite;
+        }
+
+        @keyframes scan {
+          0% {
+            transform: translateY(-4%);
+            opacity: 0.5;
+          }
+          50% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(4%);
+            opacity: 0.4;
+          }
+        }
+
+        @keyframes flicker {
+          0%,
+          100% {
+            opacity: 0.45;
+          }
+          50% {
+            opacity: 0.6;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .animate-glitch-lines,
+          .animate-glitch-noise {
+            animation: none;
+          }
+        }
+      `}</style>
     </div>
   );
 }

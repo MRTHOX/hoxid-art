@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -19,7 +20,18 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className="hidden md:flex fixed top-8 left-8 z-50 gap-6">
+      <Link href="/" className="fixed top-7 left-6 z-50">
+        <Image
+          src="/brand/hoxid-mark.png"
+          alt="HOXID mark"
+          width={28}
+          height={28}
+          priority
+          className="h-7 w-auto"
+        />
+      </Link>
+
+      <nav className="hidden md:flex fixed top-8 left-16 z-50 gap-6">
         {pages.map((page) => (
           <Link
             key={page.path}

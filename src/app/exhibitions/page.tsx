@@ -18,16 +18,16 @@ export default function ExhibitionsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-white pt-24 pb-16 px-4 md:px-8 max-w-4xl">
+      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-24 pb-16 px-4 md:px-8 max-w-4xl">
         <h1 className="text-3xl font-medium mb-12">Exhibitions</h1>
         <div className="space-y-8">
           {years.map((year) => (
             <div key={year}>
-              <h2 className="text-xl font-mono mb-4 border-b border-black pb-2">{year}</h2>
+              <h2 className="text-xl font-mono mb-4 border-b border-[var(--text-secondary)] pb-2">{year}</h2>
               {exhibitionsByYear[year].map((ex) => (
                 <div key={ex.id} className="mb-6 pl-4">
                   <h3 className="text-lg font-medium">{ex.name}</h3>
-                  <p className="text-sm font-mono text-gray-600 mt-1">
+                  <p className="text-sm font-mono text-secondary mt-1">
                     {ex.location} • {ex.startDate}
                     {ex.endDate && ` - ${ex.endDate}`}
                     {ex.role && ` • ${ex.role}`}

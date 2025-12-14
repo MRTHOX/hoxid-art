@@ -10,7 +10,7 @@ export default function AvailablePage() {
 
   return (
     <>
-      <div className="min-h-screen bg-white pt-24 pb-16 px-4 md:px-8">
+      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-24 pb-16 px-4 md:px-8">
         <h1 className="text-3xl font-medium mb-12">
           Available Works <span className="text-red-600">•</span>
         </h1>
@@ -21,7 +21,7 @@ export default function AvailablePage() {
             ))}
           </div>
         ) : (
-          <p className="text-sm font-mono text-gray-600">No available works right now.</p>
+          <p className="text-sm font-mono text-secondary">No available works right now.</p>
         )}
       </div>
       <Footer />

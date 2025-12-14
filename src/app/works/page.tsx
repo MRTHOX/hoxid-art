@@ -12,7 +12,7 @@ export default function WorksPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-white pt-24 pb-16 px-4 md:px-8">
+      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-24 pb-16 px-4 md:px-8">
         <h1 className="text-3xl font-medium mb-12">Works</h1>
         {safeWorks.length ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -21,7 +21,7 @@ export default function WorksPage() {
             ))}
           </div>
         ) : (
-          <p className="text-sm font-mono text-gray-600">No works available.</p>
+          <p className="text-sm font-mono text-secondary">No works available.</p>
         )}
       </div>
 

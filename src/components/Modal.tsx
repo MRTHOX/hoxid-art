@@ -22,7 +22,7 @@ export default function Modal({ work, onClose }: ModalProps) {
   }, [onClose]);
 
   const renderMedia = hasError || !videoUrl ? (
-    <div className="w-full aspect-video bg-gray-900 text-white flex items-center justify-center text-sm font-mono">
+    <div className="w-full aspect-video bg-[rgba(255,255,255,0.08)] text-secondary flex items-center justify-center text-sm font-mono">
       Video unavailable
     </div>
   ) : (
@@ -40,7 +40,7 @@ export default function Modal({ work, onClose }: ModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-white max-w-4xl w-full max-h-[90vh] overflow-auto"
+        className="bg-[var(--background)] text-[var(--foreground)] max-w-4xl w-full max-h-[90vh] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative">
@@ -54,11 +54,11 @@ export default function Modal({ work, onClose }: ModalProps) {
         </div>
         <div className="p-8">
           <h2 className="text-2xl font-medium">{work.title}</h2>
-          <p className="text-sm font-mono text-gray-600 mt-2">{work.year}</p>
+          <p className="text-sm font-mono text-secondary mt-2">{work.year}</p>
           {work.tags && (
             <div className="flex gap-2 mt-4 flex-wrap">
               {work.tags.map((tag) => (
-                <span key={tag} className="text-xs font-mono text-gray-500">
+                <span key={tag} className="text-xs font-mono text-muted">
                   #{tag}
                 </span>
               ))}

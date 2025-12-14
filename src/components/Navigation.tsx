@@ -31,15 +31,15 @@ export default function Navigation() {
         />
       </Link>
 
-      <nav className="hidden md:flex fixed top-8 left-16 z-50 gap-6">
+      <nav className="hidden md:flex fixed top-8 left-16 z-50 gap-6 text-foreground">
         {pages.map((page) => (
           <Link
             key={page.path}
             href={page.path}
             className={`text-sm tracking-wide transition-all duration-200 ${
               pathname === page.path
-                ? 'text-black border-b border-red-600'
-                : 'text-black hover:text-red-600'
+                ? 'border-b border-red-600'
+                : 'hover:text-red-600'
             }`}
           >
             {page.name}
@@ -48,14 +48,14 @@ export default function Navigation() {
       </nav>
 
       <button
-        className="md:hidden fixed top-8 right-8 z-50 text-black"
+        className="md:hidden fixed top-8 right-8 z-50 text-foreground"
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
       >
         {mobileMenuOpen ? '✕' : '☰'}
       </button>
 
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 bg-white z-40 flex flex-col items-center justify-center gap-8">
+        <div className="md:hidden fixed inset-0 bg-[var(--background)] text-[var(--foreground)] z-40 flex flex-col items-center justify-center gap-8">
           {pages.map((page) => (
             <Link
               key={page.path}

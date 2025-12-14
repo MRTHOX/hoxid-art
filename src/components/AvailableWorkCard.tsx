@@ -36,7 +36,7 @@ export default function AvailableWorkCard({ work }: Props) {
   }, [hasError, isHovered, work.title]);
 
   const renderMedia = hasError || !videoUrl ? (
-    <div className="w-full aspect-video bg-gray-100 flex items-center justify-center text-xs font-mono text-gray-500">
+    <div className="w-full aspect-video bg-[rgba(255,255,255,0.08)] flex items-center justify-center text-xs font-mono text-secondary">
       Media unavailable
     </div>
   ) : (
@@ -51,14 +51,14 @@ export default function AvailableWorkCard({ work }: Props) {
 
   return (
     <div
-      className="border border-black transition-all duration-200 hover:border-red-600"
+      className="border border-[var(--text-secondary)] transition-all duration-200 hover:border-red-600"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {renderMedia}
-      <div className="p-4 bg-white">
+      <div className="p-4 bg-[var(--background)]">
         <h3 className="text-sm font-medium">{work.title}</h3>
-        <p className="text-xs font-mono text-gray-600 mt-1">
+        <p className="text-xs font-mono text-secondary mt-1">
           {work.year} {work.edition && `• ${work.edition}`}
         </p>
         <a

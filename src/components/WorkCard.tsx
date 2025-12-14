@@ -37,7 +37,7 @@ export default function WorkCard({ work, onClick }: WorkCardProps) {
   }, [hasError, isHovered, work.title]);
 
   const renderMedia = hasError || !videoUrl ? (
-    <div className="w-full aspect-video bg-gray-100 flex items-center justify-center text-xs font-mono text-gray-500">
+    <div className="w-full aspect-video bg-[rgba(255,255,255,0.08)] flex items-center justify-center text-xs font-mono text-secondary">
       Media unavailable
     </div>
   ) : (
@@ -52,19 +52,19 @@ export default function WorkCard({ work, onClick }: WorkCardProps) {
 
   return (
     <div
-      className="relative border border-black cursor-pointer transition-all duration-200 hover:border-red-600"
+      className="relative border border-[var(--text-secondary)] cursor-pointer transition-all duration-200 hover:border-red-600"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
       {renderMedia}
-      <div className="p-4 bg-white">
+      <div className="p-4 bg-[var(--background)]">
         <h3 className="text-sm font-medium">{work.title}</h3>
-        <p className="text-xs font-mono text-gray-600 mt-1">{work.year}</p>
+        <p className="text-xs font-mono text-secondary mt-1">{work.year}</p>
         {work.tags && (
           <div className="flex gap-2 mt-2 flex-wrap">
             {work.tags.map((tag) => (
-              <span key={tag} className="text-xs font-mono text-gray-500">
+              <span key={tag} className="text-xs font-mono text-muted">
                 #{tag}
               </span>
             ))}

@@ -19,7 +19,7 @@ export default function ContactPage() {
                   rel="noopener noreferrer"
                   className="block hover:text-red-600 transition-colors duration-200"
                 >
-                  {link.name} &rarr;
+                  {link.name} →
                 </a>
               ))}
             </div>
@@ -29,4 +29,4 @@ export default function ContactPage() {
       <Footer />
     </>
   );
-}
+      }

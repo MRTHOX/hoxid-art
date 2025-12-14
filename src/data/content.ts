@@ -29,15 +29,19 @@ export interface Exhibition {
 export const heroVideos: HeroVideo[] = [
   {
     id: 'hero-1',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+    videoUrl: 'https://nft-cdn.alchemy.com/eth-mainnet/c58fd45932aa57813f0ac621545cecb9_animation'
   },
   {
     id: 'hero-2',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+    videoUrl: 'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/artifact'
   },
   {
     id: 'hero-3',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+    videoUrl: 'https://assets.objkt.media/file/assets-003/QmUKGTVzeiTWWxkUkXyn1ug8cL6mBbX1NEytB3rvJ7vC6C/artifact'
+  },
+  {
+    id: 'hero-4',
+    videoUrl: 'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/artifact'
   }
 ];
 

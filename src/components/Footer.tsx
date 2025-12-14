@@ -1,5 +1,5 @@
-import React from "react";
-import { socialLinks } from "@/data/content";
+import React from 'react';
+import { socialLinks } from '@/data/content';
 
 export default function Footer() {
   return (

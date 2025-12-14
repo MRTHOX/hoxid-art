@@ -7,7 +7,14 @@ import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
 const DISPLAY_DURATION_MS = 3000;
 const OVERLAY_MIN_MS = 150;
 const OVERLAY_MAX_MS = 400;
-const LOAD_FAIL_TIMEOUT_MS = 2000;
+const LOAD_FAIL_TIMEOUT_MS = 2200;
+
+const isDev = process.env.NODE_ENV !== 'production';
+const debugLog = (...args: unknown[]) => {
+  if (isDev) {
+    console.log('[VideoHero]', ...args);
+  }
+};
 
 export default function VideoHero() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,11 +58,17 @@ export default function VideoHero() {
     return () => clearTimeout(timeout);
   }, [overlayVisible]);
 
-  const skipToFollowingVideo = useCallback(() => {
-    setBufferReady(false);
-    setWaitingForBuffer(false);
-    setNextIndex((prev) => (prev + 1) % heroVideos.length);
-  }, []);
+  const skipToFollowingVideo = useCallback(
+    (reason?: string) => {
+      debugLog('Skipping to following video', { reason });
+      setBufferReady(false);
+      setWaitingForBuffer(false);
+      setOverlayVisible(false);
+      overlayStartRef.current = null;
+      setNextIndex((prev) => (prev + 1) % heroVideos.length);
+    },
+    []
+  );
 
   const performSwap = useCallback(() => {
     showOverlay();
@@ -64,6 +77,22 @@ export default function VideoHero() {
     setCurrentIndex(nextIndex);
     setNextIndex((prev) => (prev + 1) % heroVideos.length);
   }, [activeSlot, nextIndex, showOverlay]);
+
+  const handleBufferReady = useCallback(
+    (slot: 0 | 1) => {
+      if (slot === activeSlot) return;
+      clearTimeout(loadFailTimerRef.current as ReturnType<typeof setTimeout>);
+      setBufferReady(true);
+      debugLog('Marked buffer ready', { slot });
+      if (waitingForBuffer) {
+        setWaitingForBuffer(false);
+        performSwap();
+      } else {
+        hideOverlay();
+      }
+    },
+    [activeSlot, hideOverlay, performSwap, waitingForBuffer]
+  );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -87,7 +116,7 @@ export default function VideoHero() {
       try {
         await activeVideo.play();
       } catch (error) {
-        console.log('Autoplay blocked', error);
+        debugLog('Autoplay blocked', error);
       }
     };
 
@@ -119,6 +148,8 @@ export default function VideoHero() {
 
     clearTimeout(loadFailTimerRef.current as ReturnType<typeof setTimeout>);
 
+    let cleanupReadiness: (() => void) | null = null;
+
     const frame = requestAnimationFrame(() => {
       setBufferReady(false);
       setSources((prev) => {
@@ -127,36 +158,104 @@ export default function VideoHero() {
         return updated;
       });
 
-      if (bufferVideo) {
-        bufferVideo.load();
-      }
+      if (!bufferVideo) return;
+
+      bufferVideo.load();
+
+      let readinessAchieved = false;
+      let progressCheckId: number | null = null;
+      let readinessEventHandlers: { eventName: keyof HTMLMediaElementEventMap; handler: () => void }[] = [];
+
+      const markReady = (signal: string) => {
+        if (readinessAchieved) return;
+        readinessAchieved = true;
+        debugLog('Buffer ready', { bufferSlot, signal, nextIndex });
+        handleBufferReady(bufferSlot as 0 | 1);
+        if (cleanupReadiness) {
+          cleanupReadiness();
+        }
+      };
+
+      const onPlaying = () => markReady('playing');
+      const onTimeUpdate = () => {
+        markReady('timeupdate');
+      };
+
+      const readinessEvents: (keyof HTMLMediaElementEventMap)[] = [
+        'loadedmetadata',
+        'loadeddata',
+        'canplay',
+        'canplaythrough',
+      ];
+
+      const cleanup = () => {
+        readinessEventHandlers.forEach(({ eventName, handler }) => {
+          bufferVideo.removeEventListener(eventName, handler);
+        });
+        bufferVideo.removeEventListener('playing', onPlaying);
+        bufferVideo.removeEventListener('timeupdate', onTimeUpdate);
+        if (progressCheckId) {
+          cancelAnimationFrame(progressCheckId);
+        }
+      };
+
+      cleanupReadiness = cleanup;
+
+      readinessEventHandlers = readinessEvents.map((eventName) => {
+        const handler = () => markReady(eventName);
+        bufferVideo.addEventListener(eventName, handler);
+        return { eventName, handler };
+      });
+
+      bufferVideo.addEventListener('playing', onPlaying);
+      bufferVideo.addEventListener('timeupdate', onTimeUpdate);
+
+      const attemptPlay = async () => {
+        try {
+          await bufferVideo.play();
+          debugLog('Attempted play on buffer slot', { bufferSlot });
+        } catch (error) {
+          debugLog('Buffer play blocked', error);
+        }
+      };
+
+      const monitorProgress = () => {
+        if (readinessAchieved) return;
+        if (bufferVideo.currentTime > 0) {
+          markReady('currentTime-progress');
+          return;
+        }
+        progressCheckId = requestAnimationFrame(monitorProgress);
+      };
+
+      attemptPlay().then(() => {
+        progressCheckId = requestAnimationFrame(monitorProgress);
+      });
 
       loadFailTimerRef.current = setTimeout(() => {
-        skipToFollowingVideo();
+        debugLog('Buffer timeout, skipping');
+        cleanup();
+        skipToFollowingVideo('buffer timeout');
       }, LOAD_FAIL_TIMEOUT_MS);
     });
 
     return () => {
       cancelAnimationFrame(frame);
+      if (cleanupReadiness) {
+        cleanupReadiness();
+      }
+      clearTimeout(loadFailTimerRef.current as ReturnType<typeof setTimeout>);
     };
-  }, [activeSlot, nextIndex, skipToFollowingVideo, videoRefs]);
-
-  const handleBufferReady = (slot: 0 | 1) => {
-    if (slot === activeSlot) return;
-    clearTimeout(loadFailTimerRef.current as ReturnType<typeof setTimeout>);
-    setBufferReady(true);
-    if (waitingForBuffer) {
-      setWaitingForBuffer(false);
-      performSwap();
-    }
-  };
+  }, [activeSlot, handleBufferReady, nextIndex, skipToFollowingVideo, videoRefs]);
 
   const handleError = (slot: 0 | 1) => {
+    debugLog('Video error', { slot });
     if (slot === activeSlot) {
       setCurrentIndex((prev) => (prev + 1) % heroVideos.length);
       setNextIndex((prev) => (prev + 1) % heroVideos.length);
+      hideOverlay();
     } else {
-      skipToFollowingVideo();
+      skipToFollowingVideo('error event');
     }
   };
 

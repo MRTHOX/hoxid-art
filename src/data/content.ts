@@ -43,12 +43,14 @@ export const heroVideos: HeroVideo[] = [
 
 export const works: Work[] = [
   {
-    id: 'work-001',
-    title: 'Neural Collapse',
-    year: 2024,
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    tags: ['AI', 'generative']
-  },
+  id: "work-001",
+  title: "MNEME - LIGHT FAILS HERE",
+  year: 2025,
+  videoUrl: "https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact",
+  tags: ["audiovisual", "3d"],
+},
+
+  
   {
     id: 'work-002',
     title: 'Machine Breath',

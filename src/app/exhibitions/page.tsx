@@ -24,9 +24,9 @@ export default function ExhibitionsPage() {
                 <div key={ex.id} className="mb-6 pl-4">
                   <h3 className="text-lg font-medium">{ex.name}</h3>
                   <p className="text-sm font-mono text-gray-600 mt-1">
-                    {ex.location} • {ex.startDate}
-                    {ex.endDate && ` – ${ex.endDate}`}
-                    {ex.role && ` • ${ex.role}`}
+                    {ex.location} &bull; {ex.startDate}
+                    {ex.endDate && ` - ${ex.endDate}`}
+                    {ex.role && ` &bull; ${ex.role}`}
                   </p>
                   {ex.link && (
                     
@@ -35,7 +35,7 @@ export default function ExhibitionsPage() {
                       rel="noopener noreferrer"
                       className="text-xs mt-2 inline-block hover:text-red-600 transition-colors duration-200"
                     >
-                      → View Exhibition
+                      &rarr; View Exhibition
                     </a>
                   )}
                 </div>

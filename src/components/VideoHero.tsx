@@ -34,6 +34,7 @@ export default function VideoHero() {
   const videoRefs = useMemo(() => [primaryRef, secondaryRef] as const, []);
   const overlayStartRef = useRef<number | null>(null);
   const loadFailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const playbackMemoryRef = useRef<Map<string, number>>(new Map());
 
   const showOverlay = useCallback(() => {
     if (overlayVisible) return;
@@ -70,13 +71,30 @@ export default function VideoHero() {
     []
   );
 
+  const rememberPlaybackTime = useCallback(
+    (slot: 0 | 1) => {
+      const video = videoRefs[slot].current;
+      const source = sources[slot];
+
+      if (!video || !source) return;
+
+      const time = Number(video.currentTime ?? 0);
+      if (Number.isNaN(time)) return;
+
+      playbackMemoryRef.current.set(source, time);
+      debugLog('Saved playback time', { source, time });
+    },
+    [sources, videoRefs]
+  );
+
   const performSwap = useCallback(() => {
+    rememberPlaybackTime(activeSlot);
     showOverlay();
     const nextSlot: 0 | 1 = activeSlot === 0 ? 1 : 0;
     setActiveSlot(nextSlot);
     setCurrentIndex(nextIndex);
     setNextIndex((prev) => (prev + 1) % heroVideos.length);
-  }, [activeSlot, nextIndex, showOverlay]);
+  }, [activeSlot, nextIndex, rememberPlaybackTime, showOverlay]);
 
   const handleBufferReady = useCallback(
     (slot: 0 | 1) => {
@@ -110,7 +128,30 @@ export default function VideoHero() {
 
   useEffect(() => {
     const activeVideo = videoRefs[activeSlot].current;
-    if (!activeVideo || !sources[activeSlot]) return;
+    const source = sources[activeSlot];
+
+    if (!activeVideo || !source) return;
+
+    let savedTime = playbackMemoryRef.current.get(source) ?? 0;
+    if (!Number.isFinite(savedTime)) {
+      savedTime = 0;
+    }
+
+    const applySavedTime = () => {
+      try {
+        // eslint-disable-next-line react-hooks/immutability
+        const duration = Number(activeVideo?.duration ?? NaN);
+        const durationKnown = Number.isFinite(duration) && duration > 0;
+        const timeToApply =
+          durationKnown && savedTime >= duration - 0.5 ? 0 : Math.max(savedTime, 0);
+
+        if (activeVideo) {
+          activeVideo.currentTime = timeToApply;
+        }
+      } catch (error) {
+        debugLog('Seek failed, continuing without resume', error);
+      }
+    };
 
     const playVideo = async () => {
       try {
@@ -120,7 +161,21 @@ export default function VideoHero() {
       }
     };
 
-    playVideo();
+    const handleLoadedMetadata = () => {
+      applySavedTime();
+      playVideo();
+    };
+
+    if (activeVideo.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      applySavedTime();
+      playVideo();
+    } else {
+      activeVideo.addEventListener('loadedmetadata', handleLoadedMetadata);
+    }
+
+    return () => {
+      activeVideo.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
   }, [activeSlot, sources, videoRefs]);
 
   useEffect(() => {

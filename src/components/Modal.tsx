@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Work } from '@/data/content';
+import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
 
 interface ModalProps {
   work: Work;
@@ -9,6 +10,9 @@ interface ModalProps {
 }
 
 export default function Modal({ work, onClose }: ModalProps) {
+  const [hasError, setHasError] = useState(false);
+  const videoUrl = normalizeVideoUrl(work.videoUrl);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -16,6 +20,19 @@ export default function Modal({ work, onClose }: ModalProps) {
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
+
+  const renderMedia = hasError || !videoUrl ? (
+    <div className="w-full aspect-video bg-gray-900 text-white flex items-center justify-center text-sm font-mono">
+      Video unavailable
+    </div>
+  ) : (
+    <video
+      src={videoUrl}
+      className="w-full"
+      onError={() => setHasError(true)}
+      {...safeVideoAttributes}
+    />
+  );
 
   return (
     <div
@@ -33,7 +50,7 @@ export default function Modal({ work, onClose }: ModalProps) {
           >
             ✕
           </button>
-          <video src={work.videoUrl} className="w-full" autoPlay muted loop playsInline />
+          {renderMedia}
         </div>
         <div className="p-8">
           <h2 className="text-2xl font-medium">{work.title}</h2>
@@ -41,7 +58,9 @@ export default function Modal({ work, onClose }: ModalProps) {
           {work.tags && (
             <div className="flex gap-2 mt-4 flex-wrap">
               {work.tags.map((tag) => (
-                <span key={tag} className="text-xs font-mono text-gray-500">#{tag}</span>
+                <span key={tag} className="text-xs font-mono text-gray-500">
+                  #{tag}
+                </span>
               ))}
             </div>
           )}

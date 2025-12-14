@@ -3,12 +3,16 @@ import Footer from '@/components/Footer';
 import { exhibitions } from '@/data/content';
 
 export default function ExhibitionsPage() {
-  const exhibitionsByYear = exhibitions.reduce((acc, ex) => {
-    const year = ex.startDate.substring(0, 4);
+  const validExhibitions = Array.isArray(exhibitions)
+    ? exhibitions.filter((exhibition) => exhibition && exhibition.id)
+    : [];
+
+  const exhibitionsByYear = validExhibitions.reduce((acc, ex) => {
+    const year = ex.startDate?.substring(0, 4) ?? 'Unknown';
     if (!acc[year]) acc[year] = [];
     acc[year].push(ex);
     return acc;
-  }, {} as Record<string, typeof exhibitions>);
+  }, {} as Record<string, typeof validExhibitions>);
 
   const years = Object.keys(exhibitionsByYear).sort((a, b) => Number(b) - Number(a));
 
@@ -29,7 +33,7 @@ export default function ExhibitionsPage() {
                     {ex.role && ` • ${ex.role}`}
                   </p>
                   {ex.link && (
-                    
+                    <a
                       href={ex.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -47,4 +51,4 @@ export default function ExhibitionsPage() {
       <Footer />
     </>
   );
-      }
+}

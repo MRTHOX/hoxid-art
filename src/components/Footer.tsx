@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="fixed bottom-8 right-8 text-xs font-mono space-x-4 z-40">
       {socialLinks.map((link) => (
-        
+        <a
           key={link.name}
           href={link.url}
           target="_blank"

@@ -47,7 +47,7 @@ export default function AvailableWorkCard({ work }: Props) {
           rel="noopener noreferrer"
           className="inline-block mt-3 text-xs tracking-wider hover:text-red-600 transition-colors duration-200"
         >
-          VIEW / COLLECT &rarr;
+          VIEW / COLLECT →
         </a>
       </div>
     </div>

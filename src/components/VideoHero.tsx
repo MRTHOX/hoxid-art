@@ -34,7 +34,7 @@ export default function VideoHero() {
   const videoRefs = useMemo(() => [primaryRef, secondaryRef] as const, []);
   const overlayStartRef = useRef<number | null>(null);
   const loadFailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const playbackMemoryRef = useRef<Map<string, number>>(new Map());
+  const startFailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showOverlay = useCallback(() => {
     if (overlayVisible) return;
@@ -62,6 +62,10 @@ export default function VideoHero() {
   const skipToFollowingVideo = useCallback(
     (reason?: string) => {
       debugLog('Skipping to following video', { reason });
+      if (startFailTimerRef.current) {
+        clearTimeout(startFailTimerRef.current);
+        startFailTimerRef.current = null;
+      }
       setBufferReady(false);
       setWaitingForBuffer(false);
       setOverlayVisible(false);
@@ -71,30 +75,20 @@ export default function VideoHero() {
     []
   );
 
-  const rememberPlaybackTime = useCallback(
-    (slot: 0 | 1) => {
-      const video = videoRefs[slot].current;
-      const source = sources[slot];
-
-      if (!video || !source) return;
-
-      const time = Number(video.currentTime ?? 0);
-      if (Number.isNaN(time)) return;
-
-      playbackMemoryRef.current.set(source, time);
-      debugLog('Saved playback time', { source, time });
-    },
-    [sources, videoRefs]
-  );
-
   const performSwap = useCallback(() => {
-    rememberPlaybackTime(activeSlot);
     showOverlay();
     const nextSlot: 0 | 1 = activeSlot === 0 ? 1 : 0;
     setActiveSlot(nextSlot);
     setCurrentIndex(nextIndex);
     setNextIndex((prev) => (prev + 1) % heroVideos.length);
-  }, [activeSlot, nextIndex, rememberPlaybackTime, showOverlay]);
+  }, [activeSlot, nextIndex, showOverlay]);
+
+  const clearStartTimeout = useCallback(() => {
+    if (startFailTimerRef.current) {
+      clearTimeout(startFailTimerRef.current);
+      startFailTimerRef.current = null;
+    }
+  }, []);
 
   const handleBufferReady = useCallback(
     (slot: 0 | 1) => {
@@ -127,31 +121,23 @@ export default function VideoHero() {
   }, [overlayVisible]);
 
   useEffect(() => {
+    clearStartTimeout();
+
+    if (!heroVideos.length) return;
+
+    startFailTimerRef.current = setTimeout(() => {
+      debugLog('Active start timeout, skipping');
+      skipToFollowingVideo('active start timeout');
+    }, LOAD_FAIL_TIMEOUT_MS);
+
+    return () => clearStartTimeout();
+  }, [activeSlot, clearStartTimeout, skipToFollowingVideo]);
+
+  useEffect(() => {
     const activeVideo = videoRefs[activeSlot].current;
     const source = sources[activeSlot];
 
     if (!activeVideo || !source) return;
-
-    let savedTime = playbackMemoryRef.current.get(source) ?? 0;
-    if (!Number.isFinite(savedTime)) {
-      savedTime = 0;
-    }
-
-    const applySavedTime = () => {
-      try {
-        // eslint-disable-next-line react-hooks/immutability
-        const duration = Number(activeVideo?.duration ?? NaN);
-        const durationKnown = Number.isFinite(duration) && duration > 0;
-        const timeToApply =
-          durationKnown && savedTime >= duration - 0.5 ? 0 : Math.max(savedTime, 0);
-
-        if (activeVideo) {
-          activeVideo.currentTime = timeToApply;
-        }
-      } catch (error) {
-        debugLog('Seek failed, continuing without resume', error);
-      }
-    };
 
     const playVideo = async () => {
       try {
@@ -162,12 +148,10 @@ export default function VideoHero() {
     };
 
     const handleLoadedMetadata = () => {
-      applySavedTime();
       playVideo();
     };
 
     if (activeVideo.readyState >= HTMLMediaElement.HAVE_METADATA) {
-      applySavedTime();
       playVideo();
     } else {
       activeVideo.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -304,6 +288,7 @@ export default function VideoHero() {
   }, [activeSlot, handleBufferReady, nextIndex, skipToFollowingVideo, videoRefs]);
 
   const handleError = (slot: 0 | 1) => {
+    clearStartTimeout();
     debugLog('Video error', { slot });
     if (slot === activeSlot) {
       setCurrentIndex((prev) => (prev + 1) % heroVideos.length);
@@ -315,6 +300,7 @@ export default function VideoHero() {
   };
 
   const handlePlaying = (slot: 0 | 1) => {
+    clearStartTimeout();
     if (slot === activeSlot) {
       hideOverlay();
     }

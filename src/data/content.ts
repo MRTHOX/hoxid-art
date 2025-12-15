@@ -46,21 +46,62 @@ export const heroVideos: HeroVideo[] = [
 ];
 
 export const works: Work[] = [
+  // TEMP: layout testing duplicates
   {
-  id: "work-001",
-  title: "MNEME - LIGHT FAILS HERE",
-  year: 2025,
-  videoUrl: "https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact",
-  tags: ["audiovisual", "3d"],
-},
-
-  
+    id: 'mneme-01',
+    title: 'MNEME - LIGHT FAILS HERE',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+    tags: ['audiovisual', '3d']
+  },
   {
-    id: 'work-002',
-    title: 'Machine Breath',
-    year: 2023,
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'
+    id: 'mneme-02',
+    title: 'MNEME - LIGHT FAILS HERE',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+    tags: ['audiovisual', '3d']
+  },
+  {
+    id: 'mneme-03',
+    title: 'MNEME - LIGHT FAILS HERE',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+    tags: ['audiovisual', '3d']
+  },
+  {
+    id: 'mneme-04',
+    title: 'MNEME - LIGHT FAILS HERE',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+    tags: ['audiovisual', '3d']
+  },
+  {
+    id: 'mneme-05',
+    title: 'MNEME - LIGHT FAILS HERE',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+    tags: ['audiovisual', '3d']
+  },
+  {
+    id: 'mneme-06',
+    title: 'MNEME - LIGHT FAILS HERE',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+    tags: ['audiovisual', '3d']
   }
+  // Original works can be restored below when layout testing is complete:
+  // {
+  //   id: 'work-002',
+  //   title: 'Machine Breath',
+  //   year: 2023,
+  //   videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'
+  // }
 ];
 
 export const availableWorks: AvailableWork[] = [

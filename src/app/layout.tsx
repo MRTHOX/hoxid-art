@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Navigation from '@/components/Navigation';
+import { HEADER_OFFSET_CLASS } from '@/utils/layout';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const jetbrainsMono = JetBrains_Mono({ 
@@ -23,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <Navigation />
-        {children}
+        <main className={HEADER_OFFSET_CLASS}>{children}</main>
       </body>
     </html>
   );

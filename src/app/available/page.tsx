@@ -1,7 +1,10 @@
 import React from 'react';
-import AvailableWorkCard from '@/components/AvailableWorkCard';
+import WorkCard from '@/components/WorkCard';
+import WorkGrid from '@/components/WorkGrid';
 import Footer from '@/components/Footer';
+import PageShell from '@/components/PageShell';
 import { availableWorks } from '@/data/content';
+import { typography } from '@/utils/typography';
 
 export default function AvailablePage() {
   const safeWorks = Array.isArray(availableWorks)
@@ -10,20 +13,33 @@ export default function AvailablePage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-24 pb-16 px-4 md:px-8">
-        <h1 className="text-3xl font-medium mb-12">
+      <PageShell>
+        <h1 className={`${typography.h1} mb-12`}>
           Available Works <span className="text-red-600">•</span>
         </h1>
         {safeWorks.length ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <WorkGrid>
             {safeWorks.map((work) => (
-              <AvailableWorkCard key={work.id} work={work} />
+              <WorkCard
+                key={work.id}
+                work={work}
+                cta={
+                  <a
+                    href={work.viewCollectUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors duration-200"
+                  >
+                    VIEW / COLLECT →
+                  </a>
+                }
+              />
             ))}
-          </div>
+          </WorkGrid>
         ) : (
-          <p className="text-sm font-mono text-secondary">No available works right now.</p>
+          <p className={typography.meta}>No available works right now.</p>
         )}
-      </div>
+      </PageShell>
       <Footer />
     </>
   );

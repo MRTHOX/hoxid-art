@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { socialLinks } from '@/data/content';
+import { typography } from '@/utils/typography';
 
 export default function Footer() {
   return (
@@ -15,7 +16,7 @@ export default function Footer() {
         />
       </div>
 
-      <div className="text-xs font-mono space-x-4">
+      <div className={`space-x-4 ${typography.meta}`}>
         {socialLinks.map((link) => (
           <a
             key={link.name}

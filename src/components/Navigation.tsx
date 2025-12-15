@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { typography } from '@/utils/typography';
 
 export default function Navigation() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [manualMenuOpen, setManualMenuOpen] = useState(false);
+  const [hoverMenuOpen, setHoverMenuOpen] = useState(false);
+  const [hoverCapable, setHoverCapable] = useState(false);
   const pathname = usePathname();
 
   const pages = [
@@ -15,59 +18,81 @@ export default function Navigation() {
     { name: 'Available', path: '/available' },
     { name: 'Exhibitions', path: '/exhibitions' },
     { name: 'Bio', path: '/bio' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Contact', path: '/contact' }
   ];
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: hover)');
+    const handleChange = (event: MediaQueryListEvent) => setHoverCapable(event.matches);
+    setHoverCapable(mediaQuery.matches);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+    } else {
+      mediaQuery.addListener(handleChange);
+    }
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hoverCapable) {
+      setManualMenuOpen(false);
+    }
+  }, [hoverCapable]);
+
+  const isMenuVisible = hoverMenuOpen || manualMenuOpen;
+
   return (
-    <>
-      <Link href="/" className="fixed top-7 left-6 z-50">
-        <Image
-          src="/brand/hoxid-mark.png"
-          alt="HOXID mark"
-          width={28}
-          height={28}
-          priority
-          className="h-7 w-auto"
-        />
-      </Link>
+    <header
+      className="fixed top-6 left-6 z-50 flex flex-col text-white"
+      onMouseEnter={() => hoverCapable && setHoverMenuOpen(true)}
+      onMouseLeave={() => hoverCapable && setHoverMenuOpen(false)}
+    >
+      <div className="flex items-center gap-3">
+        <Link href="/" aria-label="HOXID home">
+          <Image
+            src="/brand/hoxid-mark.png"
+            alt="HOXID mark"
+            width={28}
+            height={28}
+            priority
+            className="h-7 w-auto"
+          />
+        </Link>
+        <button
+          type="button"
+          aria-expanded={isMenuVisible}
+          onClick={() => setManualMenuOpen((prev) => !prev)}
+          onFocus={() => setManualMenuOpen(true)}
+          className="font-mono text-[0.65rem] uppercase tracking-[0.4em] text-white/70 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/40"
+        >
+          MENU
+        </button>
+      </div>
 
-      <nav className="hidden md:flex fixed top-8 left-16 z-50 gap-6 text-foreground">
-        {pages.map((page) => (
-          <Link
-            key={page.path}
-            href={page.path}
-            className={`text-sm tracking-wide transition-all duration-200 ${
-              pathname === page.path
-                ? 'border-b border-red-600'
-                : 'hover:text-red-600'
-            }`}
-          >
-            {page.name}
-          </Link>
-        ))}
-      </nav>
-
-      <button
-        className="md:hidden fixed top-8 right-8 z-50 text-foreground"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-      >
-        {mobileMenuOpen ? '✕' : '☰'}
-      </button>
-
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 bg-[var(--background)] text-[var(--foreground)] z-40 flex flex-col items-center justify-center gap-8">
-          {pages.map((page) => (
-            <Link
-              key={page.path}
-              href={page.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`text-xl ${pathname === page.path ? 'border-b border-red-600' : ''}`}
-            >
-              {page.name}
-            </Link>
-          ))}
-        </div>
+      {isMenuVisible && (
+        <nav className="mt-4 flex flex-col space-y-1 text-foreground" aria-label="Primary">
+          {pages.map((page) => {
+            const active = pathname === page.path;
+            return (
+              <Link
+                key={page.path}
+                href={page.path}
+                className={`flex items-center gap-2 text-sm ${typography.nav} text-white/70 hover:text-white`}
+                onClick={() => setManualMenuOpen(false)}
+              >
+                <span className="flex-1 tracking-tight">{page.name}</span>
+                {active && <span className="text-red-600 text-xs leading-none">•</span>}
+              </Link>
+            );
+          })}
+        </nav>
       )}
-    </>
+    </header>
   );
 }

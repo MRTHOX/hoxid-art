@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { heroVideos } from '@/data/content';
 import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
+import { typography } from '@/utils/typography';
 
 const DISPLAY_DURATION_MS = 3000;
 const OVERLAY_MIN_MS = 150;
@@ -334,7 +335,7 @@ export default function VideoHero() {
             <div className={`absolute inset-0 ${reduceMotion ? '' : 'animate-glitch-lines'}`}></div>
             <div className={`absolute inset-0 mix-blend-screen ${reduceMotion ? '' : 'animate-glitch-noise'}`}></div>
           </div>
-          <div className="absolute top-4 left-4 flex flex-col items-start space-y-1 font-mono text-[10px] tracking-[0.18em] uppercase">
+          <div className={`absolute top-4 left-4 flex flex-col items-start space-y-1 ${typography.meta}`}>
             <span className="px-2 py-1 border border-white/40 bg-black/60">HOXID</span>
             <span className="text-white/60">SYNC / BUFFER / FRAME</span>
           </div>

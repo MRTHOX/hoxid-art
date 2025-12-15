@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Work } from '@/data/content';
 import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
+import { typography } from '@/utils/typography';
 
 interface ModalProps {
   work: Work;
@@ -22,7 +23,7 @@ export default function Modal({ work, onClose }: ModalProps) {
   }, [onClose]);
 
   const renderMedia = hasError || !videoUrl ? (
-    <div className="w-full aspect-video bg-[rgba(255,255,255,0.08)] text-secondary flex items-center justify-center text-sm font-mono">
+    <div className={`w-full aspect-video bg-[rgba(255,255,255,0.08)] flex items-center justify-center ${typography.meta}`}>
       Video unavailable
     </div>
   ) : (
@@ -52,13 +53,13 @@ export default function Modal({ work, onClose }: ModalProps) {
           </button>
           {renderMedia}
         </div>
-        <div className="p-8">
-          <h2 className="text-2xl font-medium">{work.title}</h2>
-          <p className="text-sm font-mono text-secondary mt-2">{work.year}</p>
+        <div className="p-8 space-y-4">
+          <h2 className={typography.h2}>{work.title}</h2>
+          <p className={typography.meta}>{work.year}</p>
           {work.tags && (
             <div className="flex gap-2 mt-4 flex-wrap">
               {work.tags.map((tag) => (
-                <span key={tag} className="text-xs font-mono text-muted">
+                <span key={tag} className={`${typography.meta} text-muted`}>
                   #{tag}
                 </span>
               ))}

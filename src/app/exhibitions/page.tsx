@@ -24,29 +24,23 @@ export default function ExhibitionsPage() {
         <h1 className={`${typography.h1} mb-12`}>Exhibitions</h1>
         <div className="space-y-8">
           {years.map((year) => (
-            <div key={year}>
-              <h2 className={`${typography.h2} mb-4 border-b border-[var(--text-secondary)] pb-2`}>{year}</h2>
-              {exhibitionsByYear[year].map((ex) => (
-                <div key={ex.id} className="mb-6 pl-4">
-                  <h3 className="font-sans text-xl font-medium tracking-tight">{ex.name}</h3>
-                  <p className={`${typography.meta} text-secondary mt-2`}>
-                    {ex.location} • {ex.startDate}
-                    {ex.endDate && ` - ${ex.endDate}`}
-                    {ex.role && ` • ${ex.role}`}
-                  </p>
-                  {ex.link && (
-                    <a
-                      href={ex.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${typography.meta} mt-2 inline-block hover:text-red-600 transition-colors duration-200`}
-                    >
-                      → View Exhibition
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
+            <section key={year} className="space-y-3">
+              <h2 className="font-mono text-[0.7rem] tracking-[0.45em] text-white/40 uppercase">{year}</h2>
+              <div className="space-y-2">
+                {exhibitionsByYear[year].map((ex) => (
+                  <div key={ex.id} className="text-white">
+                    <div className="hidden md:flex items-center justify-between gap-6">
+                      <span className="font-sans text-base font-medium tracking-tight">{ex.name}</span>
+                      <span className="font-mono text-xs tracking-[0.3em] text-white/60">{ex.location}</span>
+                    </div>
+                    <div className="md:hidden font-sans text-base font-medium tracking-tight text-white/90">
+                      {ex.name}{' '}
+                      <span className="font-mono text-xs tracking-[0.3em] text-white/60">— {ex.location}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </PageShell>

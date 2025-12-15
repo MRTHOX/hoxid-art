@@ -4,7 +4,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Work } from '@/data/content';
 import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
 import { typography } from '@/utils/typography';
-import { WORK_MEDIA_ASPECT } from '@/utils/layout';
+import {
+  WORK_MEDIA_ASPECT,
+  WORK_CARD_TITLE_SPACING,
+  WORK_CARD_META_MARGIN,
+  WORK_CARD_CTA_MARGIN,
+  WORK_CARD_META_OPACITY,
+} from '@/utils/layout';
 
 interface WorkCardProps {
   work: Work;
@@ -57,8 +63,8 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
     <video
       ref={videoRef}
       src={videoUrl}
-      className={`absolute inset-0 h-full w-full object-cover transition duration-300 ${
-        hoverCapable ? 'group-hover:opacity-85 group-hover:contrast-[1.02]' : ''
+      className={`absolute inset-0 h-full w-full object-cover transition duration-200 ${
+        hoverCapable ? 'group-hover:opacity-85 group-hover:contrast-[1.03] group-hover:scale-[1.015]' : ''
       }`}
       onError={() => setHasError(true)}
       {...safeVideoAttributes}
@@ -79,19 +85,25 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
       onClick={() => onClick?.()}
     >
       <div
-        className={`relative w-full overflow-hidden bg-black/70 transition duration-300 ${WORK_MEDIA_ASPECT}`}
+        className={`relative w-full overflow-hidden bg-black/70 transition duration-200 ${WORK_MEDIA_ASPECT}`}
       >
         {renderMedia}
       </div>
-      <div className="space-y-2">
-        <h3 className="font-sans text-lg font-medium leading-tight tracking-tight text-foreground line-clamp-2">
+      <div className="flex flex-col">
+        <h3
+          className={`font-sans text-lg font-medium leading-tight tracking-tight text-foreground line-clamp-2 ${WORK_CARD_TITLE_SPACING}`}
+        >
           {work.title}
         </h3>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/60">
-          <span className="text-white/75">{work.year}</span>
+        <div
+          className={`flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[0.7rem] uppercase tracking-[0.28em] ${WORK_CARD_META_OPACITY} ${WORK_CARD_META_MARGIN} ${
+            hoverCapable ? 'group-hover:text-white/80' : ''
+          }`}
+        >
+          <span className="text-white/80">{work.year}</span>
           {formattedTags && <span>{formattedTags}</span>}
         </div>
-        {cta && <div className="pt-1 text-white/70">{cta}</div>}
+        {cta && <div className={`${WORK_CARD_CTA_MARGIN} text-white/70`}>{cta}</div>}
       </div>
     </article>
   );

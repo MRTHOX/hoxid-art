@@ -16,7 +16,7 @@ export default function WorksPage() {
   return (
     <>
       <PageShell>
-        <h1 className={`${typography.h1} mb-12`}>Works / Archive</h1>
+        <h1 className={`${typography.h1} mb-12`}>Selected Works</h1>
         {safeWorks.length ? (
           <WorkGrid>
             {safeWorks.map((work) => (

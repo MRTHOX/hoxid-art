@@ -17,7 +17,7 @@ export default function Navigation() {
     { name: 'Works', path: '/works' },
     { name: 'Available', path: '/available' },
     { name: 'Exhibitions', path: '/exhibitions' },
-    { name: 'Bio', path: '/bio' },
+    { name: 'Practice', path: '/practice' },
     { name: 'Contact', path: '/contact' }
   ];
 

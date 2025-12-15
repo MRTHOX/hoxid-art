@@ -12,7 +12,7 @@ interface ModalProps {
 
 export default function Modal({ work, onClose }: ModalProps) {
   const [hasError, setHasError] = useState(false);
-  const videoUrl = normalizeVideoUrl(work.videoUrl);
+  const videoUrl = work.videoUrl ? normalizeVideoUrl(work.videoUrl) : undefined;
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -22,18 +22,19 @@ export default function Modal({ work, onClose }: ModalProps) {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
-  const renderMedia = hasError || !videoUrl ? (
-    <div className={`w-full aspect-video bg-[rgba(255,255,255,0.08)] flex items-center justify-center ${typography.meta}`}>
-      Video unavailable
-    </div>
-  ) : (
-    <video
-      src={videoUrl}
-      className="w-full"
-      onError={() => setHasError(true)}
-      {...safeVideoAttributes}
-    />
-  );
+  const renderMedia =
+    !videoUrl || hasError ? (
+      <div className={`w-full aspect-video bg-[rgba(255,255,255,0.08)] flex items-center justify-center ${typography.meta}`}>
+        Media unavailable
+      </div>
+    ) : (
+      <video
+        src={videoUrl}
+        className="w-full"
+        onError={() => setHasError(true)}
+        {...safeVideoAttributes}
+      />
+    );
 
   return (
     <div

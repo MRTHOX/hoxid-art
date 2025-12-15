@@ -7,13 +7,14 @@ export interface Work {
   id: string;
   title: string;
   year: number;
-  videoUrl: string;
+  videoUrl?: string;
+  imageUrl?: string;
   tags?: string[];
 }
 
 export interface AvailableWork extends Work {
   edition?: string;
-  viewCollectUrl: string;
+  viewUrl: string;
 }
 
 export interface Exhibition {
@@ -162,16 +163,102 @@ export const works: Work[] = [
 
 export const availableWorks: AvailableWork[] = [
   {
-    id: 'avail-001',
-    title: 'Synthetic Horizon',
-    year: 2024,
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-    edition: 'Edition of 25',
-    viewCollectUrl: 'https://objkt.com'
+    id: 'avail-x_7',
+    title: 'x_7',
+    year: 2025,
+    imageUrl:
+      'https://assets.objkt.media/file/assets-003/Qma6HSPHEcNGxCRj3ncJ9kBth9owkMAcLdENh2EQRDwB6C/artifact',
+    viewUrl: 'https://objkt.com/tokens/KT1LruoY7jir29GUMUYwxnYsbmiVmNcaML7A/19',
+    tags: ['edition']
+  },
+  {
+    id: 'avail-transmutation',
+    title: 'TRANSMUTATION',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/Qmeg7izFSmExc1oaq3YSZqD9jJMtwFunCRsg2JBjR26AvS/artifact',
+    viewUrl: 'https://objkt.com/tokens/KT1Dv9Q4xwzDEbPFciBnEFxGmry5BwxztXnG/10',
+    tags: ['edition']
+  },
+  {
+    id: 'avail-accumulating',
+    title: 'accumulating',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/QmRPoBpfSoattrH7h864iFuehgQjgFJJ1dN3qg7Mxvr8HY/artifact',
+    viewUrl: 'https://objkt.com/tokens/KT1RD7CgPLLp4Na4cqVYz7v5pdaeAYeyewdr/28',
+    tags: ['edition']
+  },
+  {
+    id: 'avail-mneme-light-fails-here',
+    title: 'MNEME — LIGHT FAILS HERE',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+    viewUrl: 'https://objkt.com/tokens/KT1Jj7EgKyiJcQs2JVs1q9pjfP8iQUni8fEr/2',
+    tags: ['edition']
+  },
+  {
+    id: 'avail-a-state-between',
+    title: 'A STATE BETWEEN',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/artifact',
+    viewUrl: 'https://objkt.com/tokens/KT1Sfvkj5boovQCRRFSroE6SAecPHnLed7uD/28',
+    tags: ['edition']
+  },
+  {
+    id: 'avail-reverie-protocol',
+    title: 'REVERIE PROTOCOL',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/artifact',
+    viewUrl: 'https://objkt.com/tokens/KT1A6U8cuz9XQxE5fo9fMoBT5KZ9wyiM78Ty/6',
+    tags: ['edition']
+  },
+  {
+    id: 'avail-the-weight-of-invisibility',
+    title: 'The Weight of Invisibility',
+    year: 2025,
+    videoUrl:
+      'https://assets.objkt.media/file/assets-003/QmRidJu4PtxWzpGsXfBVir1FghacYSAayPQgNN1GeFK3i9/artifact',
+    viewUrl: 'https://objkt.com/tokens/objkt-one/137',
+    tags: ['edition']
   }
 ];
 
 export const exhibitions: Exhibition[] = [
+  // 2025
+  {
+    id: 'exh-2025-nft-miami',
+    name: 'NFT Miami — “The Ocean Has Infinite Waves”',
+    location: 'USA – Miami',
+    startDate: '2025-01-01'
+  },
+  {
+    id: 'exh-2025-british-art-fair',
+    name: 'British Art Fair',
+    location: 'United Kingdom – London',
+    startDate: '2025-01-02'
+  },
+  {
+    id: 'exh-2025-trienal-sarria',
+    name: 'Trienal Sarria',
+    location: 'Spain – Sarria',
+    startDate: '2025-01-03'
+  },
+  {
+    id: 'exh-2025-nfc-summit',
+    name: 'NFC Summit',
+    location: 'Portugal – Lisbon',
+    startDate: '2025-01-04'
+  },
+  {
+    id: 'exh-2025-art-rotterdam',
+    name: 'Art Rotterdam',
+    location: 'Netherlands – Rotterdam',
+    startDate: '2025-01-05'
+  },
   // 2024
   {
     id: 'exh-2024-panopticon',
@@ -208,6 +295,12 @@ export const exhibitions: Exhibition[] = [
     name: 'RIBELA',
     location: 'Spain – Sarria',
     startDate: '2024-01-06'
+  },
+  {
+    id: 'exh-2024-british-art-fair',
+    name: 'British Art Fair',
+    location: 'United Kingdom – London',
+    startDate: '2024-01-07'
   },
   // 2023
   {
@@ -298,20 +391,7 @@ export const exhibitions: Exhibition[] = [
   }
 ];
 
-export const contactEmail = 'contact@hoxid.art';
-
-export const socialLinks = [
-  {
-    name: 'Instagram',
-    url: 'https://instagram.com',
-    label: 'IG'
-  },
-  {
-    name: 'Tezos',
-    url: 'https://objkt.com',
-    label: 'TZ'
-  }
-];
+export const contactEmail = 'hoxidart@gmail.com';
 
 export const bioText = `I explore the tension between human consciousness and machine intelligence, investigating themes of
 surveillance, generative systems, and post-internet aesthetics. Selected exhibitions include institutions across Europe and North

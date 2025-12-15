@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { socialLinks } from '@/data/content';
-import { typography } from '@/utils/typography';
+import SocialLinks from '@/components/SocialLinks';
 
 export default function Footer() {
   return (
@@ -15,20 +14,7 @@ export default function Footer() {
           className="h-4 w-auto"
         />
       </div>
-
-      <div className={`space-x-4 ${typography.meta}`}>
-        {socialLinks.map((link) => (
-          <a
-            key={link.name}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-red-600 transition-colors duration-200"
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
+      <SocialLinks />
     </footer>
   );
 }

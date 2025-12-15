@@ -18,7 +18,7 @@ export default function Navigation() {
     { name: 'Available', path: '/available' },
     { name: 'Exhibitions', path: '/exhibitions' },
     { name: 'Practice', path: '/practice' },
-    { name: 'Contact', path: '/contact' }
+    { name: 'Inquiries', path: '/inquiries' }
   ];
 
   useEffect(() => {

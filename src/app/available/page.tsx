@@ -20,12 +20,12 @@ export default function AvailablePage() {
         {safeWorks.length ? (
           <WorkGrid>
             {safeWorks.map((work) => (
-              <WorkCard
-                key={work.id}
-                work={work}
-                cta={
-                  <a
-                    href={work.viewCollectUrl}
+                <WorkCard
+                  key={work.id}
+                  work={work}
+                  cta={
+                    <a
+                    href={work.viewUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors duration-200"

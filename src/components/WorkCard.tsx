@@ -23,7 +23,8 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
   const [hasError, setHasError] = useState(false);
   const [hoverCapable, setHoverCapable] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const videoUrl = normalizeVideoUrl(work.videoUrl);
+  const hasVideo = Boolean(work.videoUrl);
+  const videoUrl = hasVideo && work.videoUrl ? normalizeVideoUrl(work.videoUrl) : '';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -35,6 +36,7 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
   }, []);
 
   useEffect(() => {
+    if (!hasVideo) return;
     const video = videoRef.current;
     if (!video || hasError) return;
 
@@ -53,24 +55,48 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
     };
 
     controlPlayback();
-  }, [hasError, hoverCapable, isHovered, work.title]);
+  }, [hasError, hasVideo, hoverCapable, isHovered, work.title]);
 
-  const renderMedia = hasError || !videoUrl ? (
-    <div className={`absolute inset-0 flex items-center justify-center bg-white/[0.04] ${typography.meta}`}>
-      Media unavailable
-    </div>
-  ) : (
-    <video
-      ref={videoRef}
-      src={videoUrl}
-      className={`absolute inset-0 h-full w-full object-cover transition duration-200 ${
-        hoverCapable ? 'group-hover:opacity-85 group-hover:contrast-[1.03] group-hover:scale-[1.015]' : ''
-      }`}
-      onError={() => setHasError(true)}
-      {...safeVideoAttributes}
-      autoPlay={false}
-    />
-  );
+  const renderMedia = () => {
+    if (hasVideo) {
+      if (hasError || !videoUrl) {
+        return (
+          <div className={`absolute inset-0 flex items-center justify-center bg-white/[0.04] ${typography.meta}`}>
+            Media unavailable
+          </div>
+        );
+      }
+      return (
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          className={`absolute inset-0 h-full w-full object-cover transition duration-200 ${
+            hoverCapable ? 'group-hover:opacity-85 group-hover:contrast-[1.03] group-hover:scale-[1.015]' : ''
+          }`}
+          onError={() => setHasError(true)}
+          {...safeVideoAttributes}
+          autoPlay={false}
+        />
+      );
+    }
+
+    if (work.imageUrl) {
+      return (
+        <img
+          src={work.imageUrl}
+          alt={work.title}
+          className="absolute inset-0 h-full w-full object-cover transition duration-200"
+          loading="lazy"
+        />
+      );
+    }
+
+    return (
+      <div className={`absolute inset-0 flex items-center justify-center bg-white/[0.04] ${typography.meta}`}>
+        Media unavailable
+      </div>
+    );
+  };
 
   const formattedTags =
     work.tags && work.tags.length ? work.tags.map((tag) => tag.toUpperCase()).join(' / ') : null;
@@ -87,7 +113,7 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
       <div
         className={`relative w-full overflow-hidden bg-black/70 transition duration-200 ${WORK_MEDIA_ASPECT}`}
       >
-        {renderMedia}
+        {renderMedia()}
       </div>
       <div className="flex flex-col">
         <h3

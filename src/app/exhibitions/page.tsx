@@ -16,7 +16,14 @@ export default function ExhibitionsPage() {
     return acc;
   }, {} as Record<string, typeof validExhibitions>);
 
-  const years = Object.keys(exhibitionsByYear).sort((a, b) => Number(b) - Number(a));
+  const years = Object.keys(exhibitionsByYear).sort((a, b) => {
+    const numA = Number(a);
+    const numB = Number(b);
+    if (Number.isNaN(numA) && Number.isNaN(numB)) return 0;
+    if (Number.isNaN(numA)) return 1;
+    if (Number.isNaN(numB)) return -1;
+    return numB - numA;
+  });
 
   return (
     <>

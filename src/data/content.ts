@@ -168,7 +168,7 @@ export const availableWorks: AvailableWork[] = [
     year: 2025,
     imageUrl:
       'https://assets.objkt.media/file/assets-003/Qma6HSPHEcNGxCRj3ncJ9kBth9owkMAcLdENh2EQRDwB6C/artifact',
-    viewUrl: 'https://objkt.com/tokens/KT1LruoY7jir29GUMUYwxnYsbmiVmNcaML7A/19',
+    viewUrl: 'https://objkt.com/tokens/KT1A6U8cuz9XQxE5fo9fMoBT5KZ9wyiM78Ty/6',
     tags: ['edition']
   },
   {
@@ -177,7 +177,7 @@ export const availableWorks: AvailableWork[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/Qmeg7izFSmExc1oaq3YSZqD9jJMtwFunCRsg2JBjR26AvS/artifact',
-    viewUrl: 'https://objkt.com/tokens/KT1Dv9Q4xwzDEbPFciBnEFxGmry5BwxztXnG/10',
+    viewUrl: 'https://objkt.com/tokens/KT1Sfvkj5boovQCRRFSroE6SAecPHnLed7uD/28',
     tags: ['edition']
   },
   {
@@ -186,7 +186,7 @@ export const availableWorks: AvailableWork[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/QmRPoBpfSoattrH7h864iFuehgQjgFJJ1dN3qg7Mxvr8HY/artifact',
-    viewUrl: 'https://objkt.com/tokens/KT1RD7CgPLLp4Na4cqVYz7v5pdaeAYeyewdr/28',
+    viewUrl: 'https://objkt.com/tokens/KT1Jj7EgKyiJcQs2JVs1q9pjfP8iQUni8fEr/2',
     tags: ['edition']
   },
   {
@@ -195,7 +195,7 @@ export const availableWorks: AvailableWork[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
-    viewUrl: 'https://objkt.com/tokens/KT1Jj7EgKyiJcQs2JVs1q9pjfP8iQUni8fEr/2',
+    viewUrl: 'https://objkt.com/tokens/KT1RD7CgPLLp4Na4cqVYz7v5pdaeAYeyewdr/28',
     tags: ['edition']
   },
   {
@@ -204,7 +204,7 @@ export const availableWorks: AvailableWork[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/artifact',
-    viewUrl: 'https://objkt.com/tokens/KT1Sfvkj5boovQCRRFSroE6SAecPHnLed7uD/28',
+    viewUrl: 'https://objkt.com/tokens/KT1Dv9Q4xwzDEbPFciBnEFxGmry5BwxztXnG/10',
     tags: ['edition']
   },
   {
@@ -213,7 +213,7 @@ export const availableWorks: AvailableWork[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/artifact',
-    viewUrl: 'https://objkt.com/tokens/KT1A6U8cuz9XQxE5fo9fMoBT5KZ9wyiM78Ty/6',
+    viewUrl: 'https://objkt.com/tokens/KT1LruoY7jir29GUMUYwxnYsbmiVmNcaML7A/19',
     tags: ['edition']
   },
   {
@@ -223,7 +223,7 @@ export const availableWorks: AvailableWork[] = [
     videoUrl:
       'https://assets.objkt.media/file/assets-003/QmRidJu4PtxWzpGsXfBVir1FghacYSAayPQgNN1GeFK3i9/artifact',
     viewUrl: 'https://objkt.com/tokens/objkt-one/137',
-    tags: ['edition']
+    tags: ['single']
   }
 ];
 

@@ -26,7 +26,7 @@ type MediaWithFallbackProps =
     });
 
 const defaultFallback = (
-  <div className="w-full h-full flex items-center justify-center bg-white/5 text-white/50 text-xs uppercase tracking-[0.3em]">
+  <div className="flex h-full w-full items-center justify-center bg-white/5 text-xs uppercase tracking-[0.3em] text-white/50">
     Media unavailable
   </div>
 );
@@ -35,8 +35,6 @@ export default function MediaWithFallback(props: MediaWithFallbackProps) {
   const { src, className, fallback, pauseOnHover = false } = props;
   const sources = useMemo(() => buildFallbackUrls(src), [src]);
   const [index, setIndex] = useState(0);
-  const currentSrc = sources[index];
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setIndex(0);
@@ -46,50 +44,68 @@ export default function MediaWithFallback(props: MediaWithFallbackProps) {
     setIndex((prev) => (prev < sources.length - 1 ? prev + 1 : prev));
   };
 
-  if (!currentSrc) {
-    return <>{fallback ?? defaultFallback}</>;
-  }
-
   const hoverHandlers = pauseOnHover
     ? {
-        onMouseEnter: () => setIsHovered(true),
-        onMouseLeave: () => setIsHovered(false),
+        onMouseEnter: () => {},
+        onMouseLeave: () => {},
       }
     : {};
 
+  const activeSources = sources.slice(index);
+
+  if (!activeSources.length) {
+    return <>{fallback ?? defaultFallback}</>;
+  }
+
   if (props.kind === 'video') {
     const { videoProps, videoRef } = props;
-    const { autoPlay = true, ...rest } = videoProps ?? {};
+    const {
+      autoPlay = true,
+      loop = true,
+      muted = true,
+      playsInline = true,
+      preload = 'metadata',
+      ...rest
+    } = videoProps ?? {};
+
     return (
       <video
-        key={`${currentSrc}-${index}`}
+        key={`${index}-${activeSources[0]}`}
         ref={videoRef}
-        data-current-src={currentSrc}
+        data-current-src={activeSources[0]}
         className={className}
-        src={currentSrc}
         autoPlay={autoPlay}
-        muted
-        playsInline
-        loop
-        preload="metadata"
+        loop={loop}
+        muted={muted}
+        playsInline={playsInline}
+        preload={preload}
+        crossOrigin="anonymous"
         onError={handleError}
         {...hoverHandlers}
         {...rest}
-      />
+      >
+        {activeSources.map((source) => (
+          <source key={source} src={source} type="video/mp4" />
+        ))}
+      </video>
     );
   }
 
   const { imageProps, imageRef } = props;
-  const { ...restImg } = imageProps ?? {};
+  const { className: imageClassName, onError, ...restImg } = imageProps ?? {};
+  const combinedClassName = [className, imageClassName].filter(Boolean).join(' ') || undefined;
 
   return (
     <img
-      key={`${currentSrc}-${index}`}
+      key={`${activeSources[0]}-${index}`}
       ref={imageRef}
-      data-current-src={currentSrc}
-      className={className}
-      src={currentSrc}
-      onError={handleError}
+      data-current-src={activeSources[0]}
+      className={combinedClassName}
+      src={activeSources[0]}
+      onError={(event) => {
+        onError?.(event);
+        handleError();
+      }}
       loading="lazy"
       {...restImg}
     />

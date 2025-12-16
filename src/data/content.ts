@@ -10,6 +10,8 @@ export interface Work {
   videoUrl?: string;
   imageUrl?: string;
   tags?: string[];
+  aspect?: 'landscape' | 'portrait' | 'square';
+  hasSound?: boolean;
 }
 
 export interface AvailableWork extends Work {
@@ -54,7 +56,8 @@ export const works: Work[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/original',
-    tags: ['exhibitied in Miami NFT 25', '3d']
+    tags: ['exhibitied in Miami NFT 25', '3d'],
+    hasSound: true
   },
   {
     id: 'work-02',
@@ -62,7 +65,9 @@ export const works: Work[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/original',
-    tags: ['audiovisual', '3d', 'exhibited in Spain']
+    tags: ['audiovisual', '3d', 'exhibited in Spain'],
+    aspect: 'portrait',
+    hasSound: true
   },
   {
     id: 'work-03',
@@ -118,7 +123,8 @@ export const works: Work[] = [
     year: 2024,
     videoUrl:
       'https://bits.raster.art/9d2e/9d2ed77c559ac806c7ee0b014265ad794be860ed75dc45e6b18b1bb25aa1904f/original',
-    tags: ['3d']
+    tags: ['3d'],
+    aspect: 'square'
   },
   {
     id: 'work-09',

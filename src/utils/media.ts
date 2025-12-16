@@ -1,7 +1,10 @@
+const ensureOriginal = (value: string) =>
+  value.replace(/\/artifact(?=$|[\?#]|$)/i, '/original');
+
 export function normalizeVideoUrl(url: string): string {
   if (!url) return '';
 
-  const trimmedUrl = url.trim();
+  const trimmedUrl = ensureOriginal(url.trim());
 
   if (trimmedUrl.startsWith('ipfs://')) {
     return `https://ipfs.io/ipfs/${trimmedUrl.slice(7)}`;
@@ -21,7 +24,7 @@ export function normalizeVideoUrl(url: string): string {
       }
     }
 
-    return parsed.toString();
+    return ensureOriginal(parsed.toString());
   } catch (error) {
     console.warn('Invalid video URL provided, returning raw value', error);
     return trimmedUrl;

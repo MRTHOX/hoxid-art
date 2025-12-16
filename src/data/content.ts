@@ -53,7 +53,7 @@ export const works: Work[] = [
     title: 'REVERIE PROTOCOL',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/artifact',
+      'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/original',
     tags: ['exhibitied in Miami NFT 25', '3d']
   },
   {
@@ -61,7 +61,7 @@ export const works: Work[] = [
     title: 'A STATE BETWEEN',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/artifact',
+      'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/original',
     tags: ['audiovisual', '3d', 'exhibited in Spain']
   },
   {
@@ -69,7 +69,7 @@ export const works: Work[] = [
     title: 'DREAM STATE OF A STATE BETWEEN',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/bafybeicodkwpajhi3nhaak6k2d2fyrrvbmkc3yw44m46cpfeam3bltbtxi/artifact',
+      'https://assets.objkt.media/file/assets-003/bafybeicodkwpajhi3nhaak6k2d2fyrrvbmkc3yw44m46cpfeam3bltbtxi/original',
     tags: ['3d']
   },
   {
@@ -77,7 +77,7 @@ export const works: Work[] = [
     title: 'VOTUM',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmdRXuPBKUuXYVNer9nsMyFMjMFp4EZy8T6kN1iZ4qAeDT/artifact',
+      'https://assets.objkt.media/file/assets-003/QmdRXuPBKUuXYVNer9nsMyFMjMFp4EZy8T6kN1iZ4qAeDT/original',
     tags: ['3d']
   },
   {
@@ -93,7 +93,7 @@ export const works: Work[] = [
     title: 'Glass Obscure',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmUKGTVzeiTWWxkUkXyn1ug8cL6mBbX1NEytB3rvJ7vC6C/artifact',
+      'https://assets.objkt.media/file/assets-003/QmUKGTVzeiTWWxkUkXyn1ug8cL6mBbX1NEytB3rvJ7vC6C/original',
     tags: ['3d']
   },
   {
@@ -101,7 +101,7 @@ export const works: Work[] = [
     title: 'Synkrasis',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmSrucqXLJGmeTBJn2GB5VD2Zvjxzye5GydqoRcv6eEKvU/artifact',
+      'https://assets.objkt.media/file/assets-003/QmSrucqXLJGmeTBJn2GB5VD2Zvjxzye5GydqoRcv6eEKvU/original',
     tags: ['3d']
   },
   {
@@ -109,7 +109,7 @@ export const works: Work[] = [
     title: 'The Weight of Invisibility',
     year: 2023,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmRidJu4PtxWzpGsXfBVir1FghacYSAayPQgNN1GeFK3i9/artifact',
+      'https://assets.objkt.media/file/assets-003/QmRidJu4PtxWzpGsXfBVir1FghacYSAayPQgNN1GeFK3i9/original',
     tags: ['3d']
   },
   {
@@ -141,7 +141,7 @@ export const works: Work[] = [
     title: 'INGRESS',
     year: 2024,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmTebEoja5Cfgfsqy8QBmtzGEWoLkpeHhmV4sX7WYa4244/artifact',
+      'https://assets.objkt.media/file/assets-003/QmTebEoja5Cfgfsqy8QBmtzGEWoLkpeHhmV4sX7WYa4244/original',
     tags: ['audiovisual','3d']
   },
   {
@@ -167,7 +167,7 @@ export const availableWorks: AvailableWork[] = [
     title: 'x_7',
     year: 2025,
     imageUrl:
-      'https://assets.objkt.media/file/assets-003/Qma6HSPHEcNGxCRj3ncJ9kBth9owkMAcLdENh2EQRDwB6C/artifact',
+      'https://assets.objkt.media/file/assets-003/Qma6HSPHEcNGxCRj3ncJ9kBth9owkMAcLdENh2EQRDwB6C/original',
     viewUrl: 'https://objkt.com/tokens/KT1A6U8cuz9XQxE5fo9fMoBT5KZ9wyiM78Ty/6',
     tags: ['edition']
   },
@@ -176,7 +176,7 @@ export const availableWorks: AvailableWork[] = [
     title: 'TRANSMUTATION',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/Qmeg7izFSmExc1oaq3YSZqD9jJMtwFunCRsg2JBjR26AvS/artifact',
+      'https://assets.objkt.media/file/assets-003/Qmeg7izFSmExc1oaq3YSZqD9jJMtwFunCRsg2JBjR26AvS/original',
     viewUrl: 'https://objkt.com/tokens/KT1Sfvkj5boovQCRRFSroE6SAecPHnLed7uD/28',
     tags: ['edition']
   },
@@ -185,7 +185,7 @@ export const availableWorks: AvailableWork[] = [
     title: 'accumulating',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmRPoBpfSoattrH7h864iFuehgQjgFJJ1dN3qg7Mxvr8HY/artifact',
+      'https://assets.objkt.media/file/assets-003/QmRPoBpfSoattrH7h864iFuehgQjgFJJ1dN3qg7Mxvr8HY/original',
     viewUrl: 'https://objkt.com/tokens/KT1Jj7EgKyiJcQs2JVs1q9pjfP8iQUni8fEr/2',
     tags: ['edition']
   },
@@ -194,7 +194,7 @@ export const availableWorks: AvailableWork[] = [
     title: 'MNEME — LIGHT FAILS HERE',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/artifact',
+      'https://assets.objkt.media/file/assets-003/bafybeidhium22z2qrl6rfhv62li3o4w23kmiw2cmpwythkrfijztg3dsga/original',
     viewUrl: 'https://objkt.com/tokens/KT1RD7CgPLLp4Na4cqVYz7v5pdaeAYeyewdr/28',
     tags: ['edition']
   },
@@ -203,7 +203,7 @@ export const availableWorks: AvailableWork[] = [
     title: 'A STATE BETWEEN',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/artifact',
+      'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/original',
     viewUrl: 'https://objkt.com/tokens/KT1Dv9Q4xwzDEbPFciBnEFxGmry5BwxztXnG/10',
     tags: ['edition']
   },
@@ -212,7 +212,7 @@ export const availableWorks: AvailableWork[] = [
     title: 'REVERIE PROTOCOL',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/artifact',
+      'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/original',
     viewUrl: 'https://objkt.com/tokens/KT1LruoY7jir29GUMUYwxnYsbmiVmNcaML7A/19',
     tags: ['edition']
   },
@@ -221,7 +221,7 @@ export const availableWorks: AvailableWork[] = [
     title: 'The Weight of Invisibility',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmRidJu4PtxWzpGsXfBVir1FghacYSAayPQgNN1GeFK3i9/artifact',
+      'https://assets.objkt.media/file/assets-003/QmRidJu4PtxWzpGsXfBVir1FghacYSAayPQgNN1GeFK3i9/original',
     viewUrl: 'https://objkt.com/tokens/objkt-one/137',
     tags: ['single']
   }

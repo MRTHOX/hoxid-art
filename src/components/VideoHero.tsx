@@ -141,7 +141,7 @@ export default function VideoHero() {
       <div className="absolute inset-0">
         {ready ? (
           <video
-            key={`${currentCandidate.work.id}-${sourceIndex}-${segmentKey}`}
+            key={`${currentCandidate?.work.id ?? 'hero'}-${sourceIndex}-${segmentKey}`}
             ref={videoRef}
             className="h-full w-full object-cover"
             src={currentSrc}

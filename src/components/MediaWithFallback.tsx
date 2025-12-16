@@ -59,15 +59,13 @@ export default function MediaWithFallback(props: MediaWithFallbackProps) {
 
   if (props.kind === 'video') {
     const { videoProps, videoRef } = props;
-    const { className: videoClassName, onError, autoPlay = true, ...rest } = videoProps ?? {};
-    const combinedClassName = [className, videoClassName].filter(Boolean).join(' ') || undefined;
-
+    const { onError, autoPlay = true, ...rest } = videoProps ?? {};
     return (
       <video
         key={`${currentSrc}-${index}`}
         ref={videoRef}
         data-current-src={currentSrc}
-        className={combinedClassName}
+        className={className}
         src={currentSrc}
         autoPlay={autoPlay}
         muted

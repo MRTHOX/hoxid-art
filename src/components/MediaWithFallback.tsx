@@ -80,20 +80,16 @@ export default function MediaWithFallback(props: MediaWithFallbackProps) {
   }
 
   const { imageProps, imageRef } = props;
-  const { className: imageClassName, onError, ...restImg } = imageProps ?? {};
-  const combinedClassName = [className, imageClassName].filter(Boolean).join(' ') || undefined;
+  const { ...restImg } = imageProps ?? {};
 
   return (
     <img
       key={`${currentSrc}-${index}`}
       ref={imageRef}
       data-current-src={currentSrc}
-      className={combinedClassName}
+      className={className}
       src={currentSrc}
-      onError={(event) => {
-        onError?.(event);
-        handleError();
-      }}
+      onError={handleError}
       loading="lazy"
       {...restImg}
     />

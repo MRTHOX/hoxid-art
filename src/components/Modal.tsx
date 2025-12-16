@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Work } from '@/data/content';
-import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
+import { normalizeVideoUrl, proxifyMediaUrl, safeVideoAttributes } from '@/utils/media';
 import { typography } from '@/utils/typography';
 
 interface ModalProps {
@@ -12,7 +12,7 @@ interface ModalProps {
 
 export default function Modal({ work, onClose }: ModalProps) {
   const [hasError, setHasError] = useState(false);
-  const videoUrl = work.videoUrl ? normalizeVideoUrl(work.videoUrl) : undefined;
+  const videoUrl = work.videoUrl ? proxifyMediaUrl(normalizeVideoUrl(work.videoUrl)) : undefined;
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {

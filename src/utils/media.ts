@@ -1,5 +1,14 @@
-const ensureOriginal = (value: string) =>
+export const ensureOriginal = (value: string) =>
   value.replace(/\/artifact(?=$|[\?#]|$)/i, '/original');
+
+export const proxifyMediaUrl = (url?: string) => {
+  if (!url) return url;
+  const normalized = ensureOriginal(url.trim());
+  if (normalized.includes('assets.objkt.media')) {
+    return `/api/media?url=${encodeURIComponent(normalized)}`;
+  }
+  return normalized;
+};
 
 export function normalizeVideoUrl(url: string): string {
   if (!url) return '';

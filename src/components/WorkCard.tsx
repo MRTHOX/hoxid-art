@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import MediaWithFallback from '@/components/MediaWithFallback';
 import { Work } from '@/data/content';
-import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
+import { safeVideoAttributes } from '@/utils/media';
 import { typography } from '@/utils/typography';
 import {
   WORK_MEDIA_ASPECT,
@@ -20,11 +21,9 @@ interface WorkCardProps {
 
 export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [hasError, setHasError] = useState(false);
   const [hoverCapable, setHoverCapable] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasVideo = Boolean(work.videoUrl);
-  const videoUrl = hasVideo && work.videoUrl ? normalizeVideoUrl(work.videoUrl) : '';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -38,7 +37,7 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
   useEffect(() => {
     if (!hasVideo) return;
     const video = videoRef.current;
-    if (!video || hasError) return;
+    if (!video) return;
 
     const controlPlayback = async () => {
       try {
@@ -50,53 +49,17 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
         }
       } catch (error) {
         console.warn(`Video playback failed for ${work.title}`, error);
-        setHasError(true);
       }
     };
 
     controlPlayback();
-  }, [hasError, hasVideo, hoverCapable, isHovered, work.title]);
+  }, [hasVideo, hoverCapable, isHovered, work.title]);
 
-  const renderMedia = () => {
-    if (hasVideo) {
-      if (hasError || !videoUrl) {
-        return (
-          <div className={`absolute inset-0 flex items-center justify-center bg-white/[0.04] ${typography.meta}`}>
-            Media unavailable
-          </div>
-        );
-      }
-      return (
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          className={`absolute inset-0 h-full w-full object-cover transition duration-200 ${
-            hoverCapable ? 'group-hover:opacity-85 group-hover:contrast-[1.03] group-hover:scale-[1.015]' : ''
-          }`}
-          onError={() => setHasError(true)}
-          {...safeVideoAttributes}
-          autoPlay={false}
-        />
-      );
-    }
-
-    if (work.imageUrl) {
-      return (
-        <img
-          src={work.imageUrl}
-          alt={work.title}
-          className="absolute inset-0 h-full w-full object-cover transition duration-200"
-          loading="lazy"
-        />
-      );
-    }
-
-    return (
-      <div className={`absolute inset-0 flex items-center justify-center bg-white/[0.04] ${typography.meta}`}>
-        Media unavailable
-      </div>
-    );
-  };
+  const mediaFallback = (
+    <div className={`absolute inset-0 flex items-center justify-center bg-white/[0.04] ${typography.meta}`}>
+      Media unavailable
+    </div>
+  );
 
   const formattedTags =
     work.tags && work.tags.length ? work.tags.map((tag) => tag.toUpperCase()).join(' / ') : null;
@@ -110,10 +73,33 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onClick?.()}
     >
-      <div
-        className={`relative w-full overflow-hidden bg-black/70 transition duration-200 ${WORK_MEDIA_ASPECT}`}
-      >
-        {renderMedia()}
+      <div className={`relative w-full overflow-hidden bg-black/70 transition duration-200 ${WORK_MEDIA_ASPECT}`}>
+        {hasVideo ? (
+          <MediaWithFallback
+            kind="video"
+            src={work.videoUrl}
+            className={`absolute inset-0 h-full w-full object-cover transition duration-200 ${
+              hoverCapable ? 'group-hover:opacity-85 group-hover:contrast-[1.03] group-hover:scale-[1.015]' : ''
+            }`}
+            videoRef={videoRef}
+            videoProps={{
+              ...safeVideoAttributes,
+              controls: false,
+              playsInline: true,
+              preload: 'metadata',
+              muted: true,
+              loop: true,
+            }}
+            fallback={mediaFallback}
+          />
+        ) : (
+          <MediaWithFallback
+            kind="image"
+            src={work.imageUrl}
+            className="absolute inset-0 h-full w-full object-cover transition duration-200"
+            fallback={mediaFallback}
+          />
+        )}
       </div>
       <div className="flex flex-col">
         <h3

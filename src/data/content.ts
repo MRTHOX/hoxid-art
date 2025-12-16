@@ -34,15 +34,15 @@ export const heroVideos: HeroVideo[] = [
   },
   {
     id: 'hero-2',
-    videoUrl: 'https://assets.objkt.media/file/assets-003/bafybeibjjuuljbixgfbq5bvggostdy6ar7n7oagaefyld5mbmww3ga3m4a/original'
+    videoUrl: 'https://bits.raster.art/e3bc/e3bc8cd84d5ac79dacde6b93571dc9000ff259b896d50dd7bc46454c953164af/original'
   },
   {
     id: 'hero-3',
-    videoUrl: 'https://assets.objkt.media/file/assets-003/QmUKGTVzeiTWWxkUkXyn1ug8cL6mBbX1NEytB3rvJ7vC6C/original'
+    videoUrl: 'https://bits.raster.art/d956/d956f9acea491659b445fb523e4f5256aef7280287cb9d93b421e1582c50b431/original'
   },
   {
     id: 'hero-4',
-    videoUrl: 'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/original'
+    videoUrl: 'https://bits.raster.art/9d2e/9d2ed77c559ac806c7ee0b014265ad794be860ed75dc45e6b18b1bb25aa1904f/original'
   }
 ];
 
@@ -101,7 +101,7 @@ export const works: Work[] = [
     title: 'Synkrasis',
     year: 2025,
     videoUrl:
-      'https://assets.objkt.media/file/assets-003/QmSrucqXLJGmeTBJn2GB5VD2Zvjxzye5GydqoRcv6eEKvU/original',
+      'https://bits.raster.art/830c/830c68fa9d5d16c01153f3f78af56669efc90a2d60d4eac49af856b0ee260e53/original',
     tags: ['3d']
   },
   {

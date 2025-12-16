@@ -12,6 +12,7 @@ import {
   WORK_CARD_CTA_MARGIN,
   WORK_CARD_META_OPACITY,
 } from '@/utils/layout';
+import { useInView } from '@/hooks/useInView';
 
 interface WorkCardProps {
   work: Work;
@@ -22,8 +23,11 @@ interface WorkCardProps {
 export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [hoverCapable, setHoverCapable] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasVideo = Boolean(work.videoUrl);
+  const { ref: inViewRef, inView } = useInView<HTMLElement>({ rootMargin: '200px' });
+  const shouldRenderVideo = hasVideo && (inView || isHovered);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -39,9 +43,15 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
     const video = videoRef.current;
     if (!video) return;
 
+    if (!shouldRenderVideo) {
+      video.pause();
+      video.currentTime = 0;
+      return;
+    }
+
     const controlPlayback = async () => {
       try {
-        if (hoverCapable && isHovered) {
+        if (!hoverCapable || isHovered) {
           await video.play();
         } else {
           video.pause();
@@ -53,7 +63,13 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
     };
 
     controlPlayback();
-  }, [hasVideo, hoverCapable, isHovered, work.title]);
+  }, [hasVideo, hoverCapable, isHovered, shouldRenderVideo, work.title]);
+
+  useEffect(() => {
+    if (!shouldRenderVideo) {
+      setVideoReady(false);
+    }
+  }, [shouldRenderVideo]);
 
   const mediaFallback = (
     <div className={`absolute inset-0 flex items-center justify-center bg-white/[0.04] ${typography.meta}`}>
@@ -66,6 +82,7 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
 
   return (
     <article
+      ref={inViewRef}
       className={`group flex flex-col gap-4 md:gap-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/30 ${
         onClick ? 'cursor-pointer' : 'cursor-default'
       }`}
@@ -74,11 +91,13 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
       onClick={() => onClick?.()}
     >
       <div className={`relative w-full overflow-hidden bg-black/70 transition duration-200 ${WORK_MEDIA_ASPECT}`}>
-        {hasVideo ? (
+        {shouldRenderVideo ? (
           <MediaWithFallback
             kind="video"
             src={work.videoUrl}
             className={`absolute inset-0 h-full w-full object-cover transition duration-200 ${
+              videoReady ? 'opacity-100' : 'opacity-0'
+            } ${
               hoverCapable ? 'group-hover:opacity-85 group-hover:contrast-[1.03] group-hover:scale-[1.015]' : ''
             }`}
             videoRef={videoRef}
@@ -89,9 +108,22 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
               preload: 'metadata',
               muted: true,
               loop: true,
+              autoPlay: false,
+              onLoadedData: () => setVideoReady(true),
             }}
             fallback={mediaFallback}
           />
+        ) : hasVideo ? (
+          work.imageUrl ? (
+            <MediaWithFallback
+              kind="image"
+              src={work.imageUrl}
+              className="absolute inset-0 h-full w-full object-cover transition duration-200"
+              fallback={<div className="absolute inset-0 bg-white/5" />}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-white/5" />
+          )
         ) : (
           <MediaWithFallback
             kind="image"

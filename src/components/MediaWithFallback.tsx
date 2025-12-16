@@ -59,7 +59,7 @@ export default function MediaWithFallback(props: MediaWithFallbackProps) {
 
   if (props.kind === 'video') {
     const { videoProps, videoRef } = props;
-    const { onError, autoPlay = true, ...rest } = videoProps ?? {};
+    const { autoPlay = true, ...rest } = videoProps ?? {};
     return (
       <video
         key={`${currentSrc}-${index}`}
@@ -72,10 +72,7 @@ export default function MediaWithFallback(props: MediaWithFallbackProps) {
         playsInline
         loop
         preload="metadata"
-        onError={(event) => {
-          onError?.(event);
-          handleError();
-        }}
+        onError={handleError}
         {...hoverHandlers}
         {...rest}
       />

@@ -5,6 +5,17 @@
   --foreground: #ffffff;
   --text-secondary: #b3b3b3;
   --text-muted: #8c8c8c;
+  --content-max: 72ch;
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-12: 4.5rem;
+  --leading-tight: 1.2;
+  --leading-normal: 1.4;
+  --leading-loose: 1.7;
   color-scheme: dark;
 }
 
@@ -24,6 +35,12 @@ body,
 
 body {
   font-family: var(--font-sans);
+  line-height: var(--leading-normal);
+  text-rendering: optimizeLegibility;
+}
+
+.measure {
+  max-width: var(--content-max);
 }
 
 .text-foreground {

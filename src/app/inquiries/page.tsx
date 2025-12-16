@@ -9,12 +9,12 @@ export default function InquiriesPage() {
   return (
     <>
       <PageShell>
-        <h1 className={`${typography.h1} mb-8`}>Inquiries</h1>
-        <div className="space-y-4 max-w-xl">
-          <p className="font-sans text-sm uppercase tracking-[0.35em] text-white/60">
-            Inquiries and collaborations:
+        <h1 className={`${typography.h1} mb-8 tracking-tight text-white/90`}>Inquiries</h1>
+        <div className="measure space-y-4">
+          <p className="font-mono text-xs uppercase tracking-[0.35em] text-white/60">
+            Inquiries and collaborations
           </p>
-          <p className="font-mono text-base text-white/80">{contactEmail}</p>
+          <p className="font-sans text-lg font-medium text-white">{contactEmail}</p>
           <SocialLinks />
         </div>
       </PageShell>

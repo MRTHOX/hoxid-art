@@ -7,6 +7,6 @@ interface WorkGridProps {
 }
 
 export default function WorkGrid({ children, className }: WorkGridProps) {
-  const baseClass = `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${WORK_GRID_GAP} supports-[hover:hover]:group/grid`;
+  const baseClass = `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${WORK_GRID_GAP} group/works`;
   return <div className={className ? `${baseClass} ${className}` : baseClass}>{children}</div>;
 }

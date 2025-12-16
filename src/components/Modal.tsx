@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import MediaWithFallback from '@/components/MediaWithFallback';
 import { Work } from '@/data/content';
-import { normalizeVideoUrl, proxifyMediaUrl, safeVideoAttributes } from '@/utils/media';
+import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
 import { typography } from '@/utils/typography';
 
 interface ModalProps {
@@ -11,8 +12,11 @@ interface ModalProps {
 }
 
 export default function Modal({ work, onClose }: ModalProps) {
-  const [hasError, setHasError] = useState(false);
-  const videoUrl = work.videoUrl ? proxifyMediaUrl(normalizeVideoUrl(work.videoUrl)) : undefined;
+  const normalizedUrl = work.videoUrl ? normalizeVideoUrl(work.videoUrl) : undefined;
+  const videoUrl =
+    normalizedUrl && normalizedUrl.includes('assets.objkt.media')
+      ? `/api/stream?url=${encodeURIComponent(normalizedUrl)}`
+      : normalizedUrl;
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -22,17 +26,26 @@ export default function Modal({ work, onClose }: ModalProps) {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
+  const fallback = (
+    <div
+      className={`w-full aspect-video bg-[rgba(255,255,255,0.08)] flex items-center justify-center ${typography.meta}`}
+    >
+      Media unavailable
+    </div>
+  );
+
   const renderMedia =
-    !videoUrl || hasError ? (
-      <div className={`w-full aspect-video bg-[rgba(255,255,255,0.08)] flex items-center justify-center ${typography.meta}`}>
-        Media unavailable
-      </div>
+    !videoUrl ? (
+      fallback
     ) : (
-      <video
+      <MediaWithFallback
+        kind="video"
         src={videoUrl}
         className="w-full"
-        onError={() => setHasError(true)}
-        {...safeVideoAttributes}
+        videoProps={{
+          ...safeVideoAttributes,
+        }}
+        fallback={fallback}
       />
     );
 

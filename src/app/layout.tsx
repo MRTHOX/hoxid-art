@@ -12,7 +12,13 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'hoxid.art',
-  description: 'Post-internet artist exploring human-machine tensions',
+  description: 'Artist explores human-machine tensions',
+  openGraph: {
+    description: 'Artist explores human-machine tensions',
+  },
+  twitter: {
+    description: 'Artist explores human-machine tensions',
+  },
 };
 
 export default function RootLayout({

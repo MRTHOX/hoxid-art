@@ -83,9 +83,9 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
   return (
     <article
       ref={inViewRef}
-      className={`group flex flex-col gap-4 md:gap-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/30 ${
+      className={`group relative flex flex-col gap-4 md:gap-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/30 ${
         onClick ? 'cursor-pointer' : 'cursor-default'
-      }`}
+      } supports-[hover:hover]:group-hover/grid:opacity-95 supports-[hover:hover]:hover:opacity-100 transition-opacity duration-200 motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:content-[''] after:rounded-none after:outline after:outline-1 after:outline-white/15 after:opacity-0 after:transition-opacity after:duration-150 motion-reduce:after:transition-none supports-[hover:hover]:hover:after:opacity-100`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onClick?.()}
@@ -135,7 +135,7 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
       </div>
       <div className="flex flex-col">
         <h3
-          className={`font-sans text-lg font-medium leading-tight tracking-tight text-foreground line-clamp-2 ${WORK_CARD_TITLE_SPACING}`}
+          className={`font-sans text-lg font-medium leading-tight tracking-tight text-foreground line-clamp-2 transition-[transform,letter-spacing] duration-200 ease-linear motion-reduce:transition-none supports-[hover:hover]:group-hover:translate-x-[2px] supports-[hover:hover]:group-hover:tracking-[0.02em] ${WORK_CARD_TITLE_SPACING}`}
         >
           {work.title}
         </h3>

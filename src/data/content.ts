@@ -131,7 +131,7 @@ export const works: Work[] = [
     title: 'Endless Morphogenesis',
     year: 2024,
     videoUrl:
-      'https://bits.raster.art/ae9f/ae9f8718c56ffe32c9ebc75a05d2fdb6304e175bec61c5a5257c32ffa8c99901/original',
+      'https://raw2.seadn.io/ethereum/0x4ac6dccf5366cce0d3c15666c107a2d5d298fdd0/45d4e36ad37dc6934ab25e8320f66a/f745d4e36ad37dc6934ab25e8320f66a.mp4',
     tags: ['3d']
   },
   {
@@ -139,7 +139,7 @@ export const works: Work[] = [
     title: 'KINESIS',
     year: 2025,
     videoUrl:
-      'https://bits.raster.art/c5d7/c5d7ec3ffca2619e0f9b772f987bf28b73e4b69c8d6fefa1614d94c38af264e9/original',
+      'https://raw2.seadn.io/ethereum/0x2c2fba4a4ba889bf4b8a08b95ff7fe6a215bba24/e8d911f341b5db7f674de138b0a66b/83e8d911f341b5db7f674de138b0a66b.mp4',
     tags: ['3d']
   },
   {

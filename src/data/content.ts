@@ -90,7 +90,7 @@ export const works: Work[] = [
     title: 'TOMORROWS WHISPERS',
     year: 2024,
     videoUrl:
-      'https://bits.raster.art/660a/660a093ba037d88bdea5560af4d313af0df817863f483a4684f3ed8e131eaaea/original',
+      'https://raw2.seadn.io/ethereum/0x3eff3fcffd9690afd59ec8d6dc3751ed772c65b5/e28ff40733cc379da6aeff32fe23cd/b1e28ff40733cc379da6aeff32fe23cd.mov',
     tags: ['audiovisual','3d']
   },
   {

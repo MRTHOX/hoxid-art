@@ -106,7 +106,7 @@ export const works: Work[] = [
     title: 'Synkrasis',
     year: 2025,
     videoUrl:
-      'https://bits.raster.art/830c/830c68fa9d5d16c01153f3f78af56669efc90a2d60d4eac49af856b0ee260e53/original',
+      'https://assets.objkt.media/file/assets-003/QmSrucqXLJGmeTBJn2GB5VD2Zvjxzye5GydqoRcv6eEKvU/artifact',
     tags: ['3d']
   },
   {

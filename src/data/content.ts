@@ -91,7 +91,8 @@ export const works: Work[] = [
     year: 2024,
     videoUrl:
       'https://raw2.seadn.io/ethereum/0x3eff3fcffd9690afd59ec8d6dc3751ed772c65b5/e28ff40733cc379da6aeff32fe23cd/b1e28ff40733cc379da6aeff32fe23cd.mov',
-    tags: ['audiovisual','3d']
+    tags: ['audiovisual','3d'],
+    hasSound: true
   },
   {
     id: 'work-05',
@@ -124,6 +125,7 @@ export const works: Work[] = [
     videoUrl:
       'https://arweave.net/FcAmEd8xOarFHhkIaUx6bNSGkonRpZWw2D3FJwxn8N4',
     tags: ['3d'],
+    hasSound: true,
     aspect: 'square'
   },
   {
@@ -148,7 +150,8 @@ export const works: Work[] = [
     year: 2024,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/QmTebEoja5Cfgfsqy8QBmtzGEWoLkpeHhmV4sX7WYa4244/original',
-    tags: ['audiovisual','3d']
+    tags: ['audiovisual','3d'],
+    hasSound: true
   },
   {
     id: 'work-14',

@@ -17,8 +17,12 @@ export default function Modal({ work, onClose }: ModalProps) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState({ current: 0, duration: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [showSoundHint, setShowSoundHint] = useState(false);
   const mediaRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const pendingSoundPref = useRef(false);
+  const hasSound = Boolean(work.hasSound);
 
   const normalizedUrl = work.videoUrl ? normalizeVideoUrl(work.videoUrl) : undefined;
   const videoUrl =
@@ -29,7 +33,17 @@ export default function Modal({ work, onClose }: ModalProps) {
   useEffect(() => {
     setIsPlaying(true);
     setProgress({ current: 0, duration: 0 });
-  }, [videoUrl]);
+    setMuted(true);
+    pendingSoundPref.current = false;
+    if (hasSound) {
+      setShowSoundHint(true);
+      if (typeof window !== 'undefined') {
+        pendingSoundPref.current = window.localStorage.getItem('hoxid_soundEnabled') === 'true';
+      }
+    } else {
+      setShowSoundHint(false);
+    }
+  }, [videoUrl, hasSound]);
 
   const cleanupVideo = useCallback(() => {
     if (videoRef.current) {
@@ -70,9 +84,42 @@ export default function Modal({ work, onClose }: ModalProps) {
     setControlsVisible(false);
   }, []);
 
+  const enableSound = useCallback(() => {
+    if (!hasSound) return;
+    setMuted(false);
+    setShowSoundHint(false);
+    pendingSoundPref.current = false;
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('hoxid_soundEnabled', 'true');
+    }
+    const playPromise = videoRef.current?.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.catch(() => null);
+    }
+  }, [hasSound]);
+
+  const disableSound = useCallback(() => {
+    setMuted(true);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('hoxid_soundEnabled', 'false');
+    }
+  }, []);
+
+  const toggleSound = useCallback(() => {
+    if (!hasSound) return;
+    if (muted) {
+      enableSound();
+    } else {
+      disableSound();
+    }
+  }, [disableSound, enableSound, hasSound, muted]);
+
   const handlePointerActivity = useCallback(() => {
     showControls();
-  }, [showControls]);
+    if (hasSound && pendingSoundPref.current && muted) {
+      enableSound();
+    }
+  }, [enableSound, hasSound, muted, showControls]);
 
   const toggleFullscreen = useCallback(async () => {
     if (!mediaRef.current) return;
@@ -195,7 +242,7 @@ export default function Modal({ work, onClose }: ModalProps) {
                 videoRef={videoRef}
                 videoProps={{
                   ...safeVideoAttributes,
-                  muted: true,
+                  muted,
                   controls: false,
                   preload: 'none',
                   onLoadedMetadata: updateProgress,
@@ -237,6 +284,31 @@ export default function Modal({ work, onClose }: ModalProps) {
                 />
               </div>
             </div>
+            {hasSound && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  aria-label={muted ? 'Unmute' : 'Mute'}
+                  className="px-2 py-1 text-white/70 transition hover:text-white"
+                  onClick={toggleSound}
+                >
+                  {muted ? (
+                    <svg viewBox="0 0 24 24" className="mx-auto h-3 w-3" fill="none" stroke="currentColor" strokeWidth={1.4}>
+                      <path d="M10 9L6.5 12H4v0l0 0h2.5L10 15V9z" fill="currentColor" stroke="none" />
+                      <path d="M15 9l4 4m0-4l-4 4" strokeLinecap="round" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" className="mx-auto h-3 w-3" fill="none" stroke="currentColor" strokeWidth={1.4}>
+                      <path d="M10 9L6.5 12H4v0l0 0h2.5L10 15V9z" fill="currentColor" stroke="none" />
+                      <path d="M15 9c2 1 3 3 3 5s-1 4-3 5m2-12c3 2 4 5 4 7s-1 5-4 7" strokeLinecap="round" />
+                    </svg>
+                  )}
+                </button>
+                {showSoundHint && muted && (
+                  <span className="text-[0.55rem] uppercase tracking-[0.3em] text-white/50">enable sound</span>
+                )}
+              </div>
+            )}
             <button
               type="button"
               aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}

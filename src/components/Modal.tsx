@@ -1,24 +1,12 @@
 'use client';
 
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MediaWithFallback from '@/components/MediaWithFallback';
 import { Work } from '@/data/content';
 import { normalizeVideoUrl, safeVideoAttributes } from '@/utils/media';
 import { typography } from '@/utils/typography';
 
 const CONTROL_HIDE_DELAY = 1500;
-
-const aspectClassMap: Record<NonNullable<Work['aspect']>, string> = {
-  portrait: 'aspect-[9/16]',
-  square: 'aspect-square',
-  landscape: 'aspect-video',
-};
 
 interface ModalProps {
   work: Work;
@@ -40,11 +28,6 @@ export default function Modal({ work, onClose }: ModalProps) {
     normalizedUrl && normalizedUrl.includes('assets.objkt.media')
       ? `/api/stream?url=${encodeURIComponent(normalizedUrl)}`
       : normalizedUrl;
-
-  const aspectClass = useMemo(() => {
-    if (!work.aspect) return 'aspect-video';
-    return aspectClassMap[work.aspect] ?? 'aspect-video';
-  }, [work.aspect]);
 
   const cleanupTimers = useCallback(() => {
     if (hideTimer.current) {
@@ -133,7 +116,7 @@ export default function Modal({ work, onClose }: ModalProps) {
 
   const fallback = (
     <div
-      className={`flex aspect-video w-full items-center justify-center bg-white/5 text-xs uppercase tracking-[0.4em] text-white/60 ${typography.meta}`}
+      className={`flex h-full w-full items-center justify-center bg-white/5 text-xs uppercase tracking-[0.4em] text-white/60 ${typography.meta}`}
     >
       Media unavailable
     </div>
@@ -145,7 +128,7 @@ export default function Modal({ work, onClose }: ModalProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 bg-black/90 ${controlsVisible ? '' : 'cursor-none'}`}
+      className={`fixed inset-0 z-50 bg-black ${controlsVisible ? '' : 'cursor-none'} overflow-hidden`}
       onClick={handleClose}
       onMouseMove={handlePointerActivity}
       onTouchStart={handlePointerActivity}
@@ -212,7 +195,7 @@ export default function Modal({ work, onClose }: ModalProps) {
 
           <div
             ref={mediaRef}
-            className={`mx-auto flex max-h-[88vh] max-w-[92vw] items-center justify-center ${aspectClass} overflow-hidden`}
+            className="mx-auto flex h-[clamp(420px,78vh,900px)] max-h-[88vh] max-w-[92vw] aspect-video items-center justify-center bg-black overflow-hidden"
             onClick={handlePointerActivity}
           >
             {videoUrl ? (

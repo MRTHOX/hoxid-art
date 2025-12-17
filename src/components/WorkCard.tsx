@@ -26,8 +26,15 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
   const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasVideo = Boolean(work.videoUrl);
+  const hasImage = Boolean(work.imageUrl);
   const { ref: inViewRef, inView } = useInView<HTMLElement>({ rootMargin: '200px' });
   const shouldRenderVideo = hasVideo && (inView || isHovered);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production' && !hasVideo && !hasImage) {
+      console.warn(`Work ${work.id} does not have a video or image source.`);
+    }
+  }, [hasImage, hasVideo, work.id]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -113,24 +120,17 @@ export default function WorkCard({ work, onClick, cta }: WorkCardProps) {
             }}
             fallback={mediaFallback}
           />
-        ) : hasVideo ? (
-          work.imageUrl ? (
-            <MediaWithFallback
-              kind="image"
-              src={work.imageUrl}
-              className="absolute inset-0 h-full w-full object-cover transition duration-200"
-              fallback={<div className="absolute inset-0 bg-white/5" />}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-white/5" />
-          )
-        ) : (
+        ) : hasImage ? (
           <MediaWithFallback
             kind="image"
             src={work.imageUrl}
             className="absolute inset-0 h-full w-full object-cover transition duration-200"
-            fallback={mediaFallback}
+            fallback={<div className="absolute inset-0 bg-white/5" />}
           />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/5 text-xs tracking-[0.3em] text-white/50">
+            MEDIA MISSING
+          </div>
         )}
       </div>
       <div className="flex flex-col">

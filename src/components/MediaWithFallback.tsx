@@ -11,7 +11,7 @@ type BaseProps = {
 };
 
 type VideoProps = React.VideoHTMLAttributes<HTMLVideoElement>;
-type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
+type SafeImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src'>;
 
 type MediaWithFallbackProps =
   | (BaseProps & {
@@ -21,7 +21,7 @@ type MediaWithFallbackProps =
     })
   | (BaseProps & {
       kind: 'image';
-      imageProps?: Omit<ImageProps, 'src' | 'className' | 'onError'>;
+      imageProps?: SafeImageProps;
       imageRef?: React.Ref<HTMLImageElement>;
     });
 

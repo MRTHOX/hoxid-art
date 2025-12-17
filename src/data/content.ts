@@ -122,7 +122,7 @@ export const works: Work[] = [
     title: 'STRATA',
     year: 2024,
     videoUrl:
-      'https://bits.raster.art/9d2e/9d2ed77c559ac806c7ee0b014265ad794be860ed75dc45e6b18b1bb25aa1904f/original',
+      'https://arweave.net/FcAmEd8xOarFHhkIaUx6bNSGkonRpZWw2D3FJwxn8N4',
     tags: ['3d'],
     aspect: 'square'
   },

@@ -25,10 +25,8 @@ export default function Modal({ work, onClose }: ModalProps) {
   const hasSound = Boolean(work.hasSound);
 
   const normalizedUrl = work.videoUrl ? normalizeVideoUrl(work.videoUrl) : undefined;
-  const videoUrl =
-    normalizedUrl && normalizedUrl.includes('assets.objkt.media')
-      ? `/api/stream?url=${encodeURIComponent(normalizedUrl)}`
-      : normalizedUrl;
+  const videoUrl = normalizedUrl;
+
 
   useEffect(() => {
     setIsPlaying(true);

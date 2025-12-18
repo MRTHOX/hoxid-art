@@ -9,6 +9,7 @@ export interface Work {
   year: number;
   videoUrl?: string;
   imageUrl?: string;
+  coverWebp?: string;
   tags?: string[];
   aspect?: 'landscape' | 'portrait' | 'square';
   hasSound?: boolean;
@@ -56,6 +57,7 @@ export const works: Work[] = [
     year: 2025,
     videoUrl:
       'https://assets.objkt.media/file/assets-003/bafybeihswxn36d6duxh6ufkqubn57ilp4q5rasbsh2nnutbpuvckway2xe/original',
+    coverWebp: '/covers/reverie-protocol.webp',
     tags: ['exhibitied in Miami NFT 25', '3d'],
     hasSound: true
   },

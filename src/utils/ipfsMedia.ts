@@ -41,6 +41,12 @@ export function buildFallbackUrls(input?: string | null): string[] {
   const cid = extractCid(trimmed);
   const urls: string[] = [];
 
+  // ✅ Local/public paths like "/covers/xxx.webp"
+  if (trimmed.startsWith('/')) {
+    urls.push(trimmed);
+    return Array.from(new Set(urls));
+  }
+
   if (cid) {
     urls.push(
       `https://bits.raster.art/${cid}/original`,
@@ -56,3 +62,4 @@ export function buildFallbackUrls(input?: string | null): string[] {
 
   return Array.from(new Set(urls));
 }
+

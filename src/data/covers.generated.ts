@@ -1,6 +1,6 @@
 // AUTO-GENERATED — DO NOT EDIT
 export const generatedCovers: Record<string, string> = {
-  "work-01": "/covers/reverie-protocol.webp",
+  "work-01": "/covers/work-01.webp",
   "work-02": "/covers/work-02.webp",
   "work-03": "/covers/work-03.webp",
   "work-04": "/covers/work-04.webp",

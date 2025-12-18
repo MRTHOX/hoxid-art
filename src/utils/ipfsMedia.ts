@@ -13,16 +13,13 @@ export function extractCid(input?: string | null): string | null {
     return cid || null;
   }
 
-  const plainMatch = trimmed.match(/^Qm[1-9A-HJ-NP-Za-km-z]{44}$/i) || trimmed.match(/^bafy[a-z0-9]{50,}$/i);
+  const plainMatch =
+    trimmed.match(/^Qm[1-9A-HJ-NP-Za-km-z]{44}$/i) || trimmed.match(/^bafy[a-z0-9]{50,}$/i);
   if (plainMatch) {
     return plainMatch[0];
   }
 
-  const regexes = [
-    /file\/assets-003\/([^/?#]+)/i,
-    /bits\.raster\.art\/([^/?#]+)/i,
-    /ipfs\/([^/?#]+)/i,
-  ];
+  const regexes = [/file\/assets-003\/([^/?#]+)/i, /bits\.raster\.art\/([^/?#]+)/i, /ipfs\/([^/?#]+)/i];
 
   for (const pattern of regexes) {
     const match = trimmed.match(pattern);
@@ -38,14 +35,16 @@ export function extractCid(input?: string | null): string | null {
 export function buildFallbackUrls(input?: string | null): string[] {
   if (!input) return [];
   const trimmed = input.trim();
+  if (!trimmed) return [];
+
+  // ✅ Local/public paths like "/covers/xxx.webp" should be used directly
+  // This fixes MediaWithFallback for generated covers on production.
+  if (trimmed.startsWith('/')) {
+    return [trimmed];
+  }
+
   const cid = extractCid(trimmed);
   const urls: string[] = [];
-
-  // ✅ Local/public paths like "/covers/xxx.webp"
-  if (trimmed.startsWith('/')) {
-    urls.push(trimmed);
-    return Array.from(new Set(urls));
-  }
 
   if (cid) {
     urls.push(
@@ -62,4 +61,3 @@ export function buildFallbackUrls(input?: string | null): string[] {
 
   return Array.from(new Set(urls));
 }
-

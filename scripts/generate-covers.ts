@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import ffmpeg from 'fluent-ffmpeg';
-// @ts-expect-error
+
 import ffmpegPath from 'ffmpeg-static';
 
 import { works } from '../src/data/content';

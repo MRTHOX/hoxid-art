@@ -1,5 +1,10 @@
+import MainShell from '@/components/MainShell';
 import VideoHero from '@/components/VideoHero';
 
 export default function Home() {
-  return <VideoHero />;
+  return (
+    <MainShell>
+      <VideoHero />
+    </MainShell>
+  );
 }

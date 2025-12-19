@@ -2,35 +2,27 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Navigation from '@/components/Navigation';
-import { HEADER_OFFSET_CLASS } from '@/utils/layout';
+import MainShell from '@/components/MainShell';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ['latin'], 
-  variable: '--font-jetbrains-mono' 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
 });
 
 export const metadata: Metadata = {
   title: 'hoxid.art',
   description: 'Artist explores human-machine tensions',
-  openGraph: {
-    description: 'Artist explores human-machine tensions',
-  },
-  twitter: {
-    description: 'Artist explores human-machine tensions',
-  },
+  openGraph: { description: 'Artist explores human-machine tensions' },
+  twitter: { description: 'Artist explores human-machine tensions' },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <Navigation />
-        <main className={HEADER_OFFSET_CLASS}>{children}</main>
+        <MainShell>{children}</MainShell>
       </body>
     </html>
   );

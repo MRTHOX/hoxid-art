@@ -137,7 +137,7 @@ export default function VideoHero() {
   const ready = mounted && Boolean(currentCandidate) && Boolean(currentSrc);
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+    <section className="relative h-[100dvh] w-full overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
         {ready ? (
           <video
@@ -153,12 +153,12 @@ export default function VideoHero() {
             onError={handleVideoError}
           />
         ) : (
-          <div className="h-full w-full bg-black" />
+          <div className="h-full w-full bg-black" />                    
         )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/80" />
       </div>
 
-      <div className="relative z-10 flex min-h-screen flex-col justify-between px-6 py-8 md:px-10 md:py-12">
+      <div className="relative z-10 flex flex h-full flex-col justify-between px-6 py-8 md:px-10 md:py-12">
         {ready && (
           <>
             <div className="flex items-center justify-end font-mono text-[0.65rem] uppercase tracking-[0.35em] text-white/60">
